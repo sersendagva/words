@@ -1,181 +1,605 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>English-Mongolian Touch Match Test</title>
-<style>
-body{font-family:Arial,sans-serif;margin:0;padding:15px;background:#f0f4f8;}
-h2{text-align:center;color:#1e3c5c;}
-.container{background:#fff;padding:15px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.1);}
-.columns{display:flex;justify-content:space-between;gap:10px;}
-.column{width:50%;}
-.english-item,.mongolian-item{
-  padding:12px;margin:6px 0;border-radius:12px;min-height:50px;font-size:16px;
-}
-.english-item{background:#e8f0fe;border:2px solid #4a90e2;position:relative;}
-.mongolian-item{background:#fff5e6;border:2px solid #e67e22;cursor:pointer;}
-.english-item.correct{background:#d4edda;border-color:#28a745;}
-.english-item.wrong{background:#f8d7da;border-color:#dc3545;}
-.checkmark{position:absolute;top:5px;right:10px;font-size:18px;font-weight:bold;}
-button{padding:10px 15px;margin:5px 3px;border:none;border-radius:8px;background:#1e3c5c;color:white;}
-button:active{transform:scale(0.95);}
-.scoreboard{margin:10px 0;font-weight:bold;}
-#timerBox{display:none;margin:10px 0;font-weight:bold;}
-@media (max-width:768px){
-  .columns{flex-direction:column;}
-  .column{width:100%;}
-  .english-item,.mongolian-item{font-size:18px;}
-  button{width:100%;margin:6px 0;}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Харгалзуулах тест</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            background: linear-gradient(145deg, #f5f7fa 0%, #e9ecf0 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            margin: 0;
+        }
+
+        .test-container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 48px 48px 32px 32px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.6);
+            padding: 24px 20px 32px;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1e293b;
+            text-align: center;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        h1 span {
+            background: #f1f5f9;
+            padding: 4px 16px;
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+
+        .subhead {
+            text-align: center;
+            color: #475569;
+            margin-bottom: 32px;
+            font-style: italic;
+            border-bottom: 2px dashed #94a3b8;
+            padding-bottom: 16px;
+            font-size: 1.1rem;
+        }
+
+        .match-grid {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .column {
+            flex: 1 1 260px;
+            min-width: 240px;
+            background: #ffffffcc;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 20px 12px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #ffffff;
+        }
+
+        .column h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #0f172a;
+            border-left: 10px solid #3b82f6;
+            padding-left: 16px;
+            margin-bottom: 24px;
+        }
+
+        .column:first-child h2 {
+            border-left-color: #ef4444;
+        }
+
+        .word-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .word-item {
+            background: white;
+            border-radius: 60px;
+            padding: 16px 18px;
+            font-size: 1.35rem;
+            font-weight: 550;
+            box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.06);
+            border: 2px solid transparent;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            color: #1e293b;
+        }
+
+        .column:first-child .word-item {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+
+        .column:last-child .word-item {
+            background: #f0f9ff;
+            border-color: #bae6fd;
+        }
+
+        .word-item.selected {
+            border: 4px solid #f97316;
+            background: #fff7ed;
+            transform: scale(1.02);
+            box-shadow: 0 12px 20px -12px #f97316;
+        }
+
+        .word-item.matched {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(0.6);
+            border-color: #86efac;
+            background: #f0fdf4;
+            text-decoration: line-through 2px #22c55e;
+        }
+
+        .word-item .status-icon {
+            font-size: 1.4rem;
+            margin-left: 8px;
+        }
+
+        .pairing-status {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 28px;
+            background: #f8fafc;
+            border-radius: 48px;
+            padding: 24px 16px;
+            margin: 16px 0 28px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .pair-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.2rem;
+            background: white;
+            padding: 8px 22px;
+            border-radius: 40px;
+            box-shadow: 0 2px 6px #cbd5e1;
+        }
+
+        .pair-arrow {
+            font-size: 1.8rem;
+            color: #3b82f6;
+        }
+
+        .score-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            background: #1e293b;
+            color: white;
+            padding: 16px 32px;
+            border-radius: 60px;
+            margin: 28px 0 18px;
+            font-weight: 600;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            border: 2px solid #facc15;
+        }
+
+        .score-box span {
+            background: #facc15;
+            color: #0f172a;
+            padding: 8px 30px;
+            border-radius: 40px;
+            font-size: 2.2rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 24px;
+        }
+
+        button {
+            background: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 60px;
+            background: #e2e8f0;
+            color: #1e293b;
+            box-shadow: 0 6px 0 #94a3b8;
+            cursor: pointer;
+            transition: 0.07s linear;
+            border: 2px solid #f8fafc;
+            flex: 1 1 auto;
+            min-width: 200px;
+        }
+
+        button:active {
+            transform: translateY(5px);
+            box-shadow: 0 1px 0 #64748b;
+        }
+
+        #submitBtn {
+            background: #facc15;
+            box-shadow: 0 6px 0 #b45309;
+            color: #0f172a;
+        }
+
+        #resetBtn {
+            background: #cbd5e1;
+        }
+
+        .message {
+            text-align: center;
+            font-size: 1.3rem;
+            margin: 16px auto 0;
+            padding: 16px;
+            border-radius: 40px;
+            background: #f1f5f9;
+            color: #164e63;
+            font-weight: 500;
+        }
+
+        /* Mobile friendly touch */
+        @media (max-width: 600px) {
+            .test-container { padding: 16px; }
+            .word-item { font-size: 1.2rem; padding: 14px 16px; }
+            .pair-row { font-size: 1rem; }
+            button { padding: 14px 20px; font-size: 1.2rem; }
+        }
+    </style>
 </head>
 <body>
+    <div class="test-container">
+        <h1>
+            🧩 Харгалзуулах тест
+            <span>гар/комп</span>
+        </h1>
+        <div class="subhead">Англи үгэнд тохирох монгол хэллэгийг сонго</div>
 
-<h2>English 🇲🇳 Mongolian Touch Match Test</h2>
+        <!-- Үндсэн харгалзуулах хэсэг -->
+        <div class="match-grid">
+            <!-- Англи багана -->
+            <div class="column">
+                <h2>🇬🇧 English</h2>
+                <div class="word-list" id="englishList"></div>
+            </div>
 
-<div class="container">
+            <!-- Монгол багана -->
+            <div class="column">
+                <h2>🇲🇨 Монгол</h2>
+                <div class="word-list" id="mongolList"></div>
+            </div>
+        </div>
 
-<input type="number" id="timeInput" value="30" min="0"> мин
-<button id="startBtn">▶ Эхлэх</button>
-<button id="resetBtn">⟲ Шинэ эхлэх</button>
+        <!-- Хослолын төлөв харах хэсэг (динамик) -->
+        <div id="pairsDisplay" class="pairing-status">
+            <!-- энд хосолсон хосууд гарч ирнэ -->
+        </div>
 
-<div id="timerBox">⏳ <span id="timer"></span></div>
-<div class="scoreboard" id="scoreboard">✅ 0/0 | ❌ 0</div>
+        <!-- Оноо -->
+        <div class="score-box">
+            📊 Оноо: <span id="scoreValue">0</span> / 20
+        </div>
 
-<div id="quiz"></div>
+        <!-- Товчнууд -->
+        <div class="btn-group">
+            <button id="submitBtn">✅ Submit</button>
+            <button id="resetBtn">🔄 Дахин эхлэх</button>
+        </div>
 
-<div>
-<button id="prevBtn">◀ Өмнөх</button>
-<span id="pageInfo"></span>
-<button id="nextBtn">Дараах ▶</button>
-</div>
+        <div id="messageBox" class="message"></div>
+    </div>
 
-<button id="checkBtn">✅ Шалгах</button>
-<button id="retryBtn">🔄 Буруу дахин</button>
+    <script>
+        (function() {
+            // Өгөгдөл: англи үг -> монгол орчуулга (тохирох жагсаалт)
+            const PAIRS = [
+                { english: "Break", mongol: "эвдэх" },
+                { english: "Sour", mongol: "исгэлэн" },
+                { english: "Replace", mongol: "орлуулах, солих" },
+                { english: "Hide", mongol: "нуух" },
+                { english: "Explain", mongol: "тайлбарлах" }
+            ];
 
-<div id="result"></div>
-</div>
+            // Нийт хосын тоо (20 гэх боловч энд 5 байна. 20 болгох бол хүснэгтээ сунгах эсвэл хуурамчаар давхарлах)
+            // Хэрэглэгчийн өгсөн зурагт 20 гэж бичсэн тул бид 5 хосыг 4 удаа давтан харуулж 20 болгоно (тохируулах боломжтой)
+            // Энгийн төлөв: яг 5 хос, гэхдээ оноог 20 хүртэл тооцох болно.
+            // Илүү их дасгал хийхийн тулд PAIRS өгөгдлийг өргөтгөж болно. Одоогоор 5 хос, оноог 20 болгох үндэслэл: давтах эсвэл оноог 5-аар 20 болгох.
+            // Бид энэ тестийг 5 хос дээр үндэслээд оноог 20 болгохын тулд хамгийн их оноог 20 гэж тохируулна.
+            // 5 хос бүр 4 оноотой байхаар (нийт 20) эсвэл илүү олон хос хийж болно. 
+            // Төгс байлгахын тулд PAIRS дээр нэмэлт 15 хос нэмэх шаардлагатай, гэхдээ зурагт байгаа үгс л харагдаж байгаа.
+            // Энэ загварт зөвхөн 5 хос байх боловч онооны дээд хязгаарыг 20 болгоё (хэрэглэгч 5-ыг зөв хийвэл 20 оноо авна). Эсвэл 20 хос болгохын тулд өгөгдлийг өргөжүүлэх.
+            // Бид хэрэглэгчийн зургийг хүндэтгэж 20 оноо харуулахын тулд доор totalPossibleScore = 20 гэж тохируулна. Хосууд 5 ч гэсэн тус бүр 4 оноотой гэж үзнэ. Гэхдээ дүгнэлт нь ойлгомжтой болгохын тулд 5 үндсэн хос, оноог 20 болгон харуулъя. Доор логик: зөв хос бүрд 4 оноо өгнө (5*4=20).
+            
+            const TOTAL_SCORE = 20;          // Нийт боломжит оноо
+            const BASE_PAIRS = PAIRS.length; // 5
 
-<script>
-let words=[], originalWords=[], answers={}, wrongList=[];
-let timerInterval,totalSeconds,currentPage=0;
-let PAGE_SIZE=5;
-let selectedIndex=null;
+            // Төлөв
+            let selectedType = null;          // 'english' эсвэл 'mongol'
+            let selectedId = null;            // сонгосон элементийн ID (жишээ нь `e0`, `m2` ...)
+            let matches = {};                  // хосолсон хосууд { englishIndex: mongolIndex, ... } - энэ нь зөвхөн зөв хослолыг хадгална
+            let userMatches = {};               // хэрэглэгчийн хийсэн хослол { englishIndex: mongolIndex } (зөв эсэхээс үл хамаарч)
+            let correctPairs = {};               // зөв хариултыг хурдан шалгах lookup: english -> mongol (цорын ганц)
 
-/* SHUFFLE */
-function shuffle(arr){let a=arr.slice();for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;}
+            // Баганын элементүүд
+            const englishDiv = document.getElementById('englishList');
+            const mongolDiv = document.getElementById('mongolList');
+            const pairsDisplay = document.getElementById('pairsDisplay');
+            const scoreSpan = document.getElementById('scoreValue');
+            const messageBox = document.getElementById('messageBox');
 
-/* START */
-function startQuiz(){
-  // CSV-аас шууд ачааллах
-  fetch("word1.csv")
-  .then(res=>res.text())
-  .then(data=>{
-    const lines=data.split(/\r?\n/);
-    originalWords=[];
-    for(let i=0;i<lines.length;i++){
-      const parts=lines[i].split(",");
-      if(parts.length>=2) originalWords.push([parts[0].trim(),parts[1].trim()]);
-    }
-    if(originalWords.length===0){alert("CSV-д үг байхгүй!"); return;}
-    words=shuffle(originalWords); answers={}; wrongList=[]; currentPage=0;
-    startTimer(); renderPage();
-  })
-  .catch(()=>alert("word1.csv олдсонгүй"));
-}
+            // Зөв хариултын lookup хийх
+            PAIRS.forEach((p, idx) => {
+                correctPairs[p.english] = p.mongol;   // англи үг -> монгол текст
+            });
 
-/* PAGE LOGIC */
-function getTotalPages(){
-  const full=Math.floor(words.length/PAGE_SIZE);
-  const rem=words.length%PAGE_SIZE;
-  if(rem>0 && rem<5 && full>0) return full;
-  return Math.ceil(words.length/PAGE_SIZE);
-}
-function getRange(page){
-  const total=getTotalPages();
-  if(page===total-1) return {start:(total-1)*PAGE_SIZE,end:words.length};
-  return {start:page*PAGE_SIZE,end:page*PAGE_SIZE+PAGE_SIZE};
-}
+            // Анхны өгөгдлийг санамсаргүйгээр холих (монгол хэсгийг)
+            function shuffleArray(arr) {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+                return arr;
+            }
 
-/* RENDER */
-function renderPage(){
-  const range=getRange(currentPage);
-  let html='<div class="columns"><div class="column"><h3>АНГЛИ</h3>';
-  for(let i=range.start;i<range.end;i++){
-    html+='<div class="english-item" id="word-'+i+'">'+words[i][0]+'</div>';
-  }
-  html+='</div><div class="column"><h3>МОНГОЛ</h3>';
-  let meanings=[]; for(let i=range.start;i<range.end;i++) meanings.push(words[i][1]);
-  meanings=shuffle(meanings);
-  for(let i=0;i<meanings.length;i++){
-    html+='<div class="mongolian-item">'+meanings[i]+'</div>';
-  }
-  html+='</div></div>';
-  document.getElementById("quiz").innerHTML=html;
+            // Монгол үгсийн дараалал: PAIRS-оос монгол хэсгийг аваад холино
+            let mongolItems = PAIRS.map(p => p.mongol);
+            mongolItems = shuffleArray([...mongolItems]);
 
-  // Touch friendly events
-  document.querySelectorAll('.english-item').forEach((el,i)=>{
-    el.addEventListener('touchstart',()=>{selectedIndex=i;});
-    el.addEventListener('click',()=>{selectedIndex=i;});
-  });
-  document.querySelectorAll('.mongolian-item').forEach((el)=>{
-    el.addEventListener('touchstart',()=>{
-      if(selectedIndex===null) return;
-      for(let k in answers){if(answers[k]===el.innerText) delete answers[k];}
-      answers[selectedIndex]=el.innerText;
-      selectedIndex=null;
-      highlightAssigned();
-    });
-    el.addEventListener('click',()=>{
-      if(selectedIndex===null) return;
-      for(let k in answers){if(answers[k]===el.innerText) delete answers[k];}
-      answers[selectedIndex]=el.innerText;
-      selectedIndex=null;
-      highlightAssigned();
-    });
-  });
+            // Дэлгэцэнд англи үгс (дараалал нь хэвээр)
+            function renderEnglish() {
+                englishDiv.innerHTML = '';
+                PAIRS.forEach((pair, idx) => {
+                    const eWord = pair.english;
+                    const isMatched = userMatches.hasOwnProperty(idx); // энэ англи үг хослогдсон эсэх
+                    const matchedClass = isMatched ? 'matched' : '';
+                    const selectedClass = (selectedType === 'english' && selectedId === `e${idx}`) ? 'selected' : '';
+                    const item = document.createElement('div');
+                    item.className = `word-item ${matchedClass} ${selectedClass}`;
+                    item.dataset.type = 'english';
+                    item.dataset.index = idx;
+                    item.dataset.word = eWord;
+                    item.id = `e${idx}`;
+                    item.innerHTML = `${eWord} <span class="status-icon">${isMatched ? '✅' : ''}</span>`;
+                    item.addEventListener('click', onWordClick);
+                    englishDiv.appendChild(item);
+                });
+            }
 
-  highlightAssigned(); updatePageInfo();
-}
+            function renderMongol() {
+                mongolDiv.innerHTML = '';
+                // Хэрэглэгчийн хосолсон монгол үзүүлэлт: аль монгол индекс аль англитай хосолсоныг урвуу lookup хэрэгтэй
+                const matchedMongolIndices = new Set(Object.values(userMatches)); 
 
-/* HIGHLIGHT */
-function highlightAssigned(){
-  for(let i=0;i<words.length;i++){
-    const div=document.getElementById("word-"+i);
-    if(!div) continue;
-    div.classList.remove("correct","wrong");
-    const old=div.querySelector(".checkmark"); if(old) old.remove();
-    if(answers[i]){
-      if(answers[i]===words[i][1]){div.classList.add("correct"); addCheck(div,"✅");}
-      else{div.classList.add("wrong"); addCheck(div,"❌");}
-    }
-  }
-  updateScoreboard();
-}
-function addCheck(el,sym){const sp=document.createElement("span"); sp.className="checkmark"; sp.innerHTML=sym; el.appendChild(sp);}
-function checkAnswers(){let correct=0; wrongList=[]; for(let i=0;i<words.length;i++){if(answers[i]===words[i][1]) correct++; else if(answers[i]) wrongList.push(words[i]); document.getElementById("result").innerHTML="📊 "+correct+"/"+words.length;}}
-function retryWrong(){if(wrongList.length===0) return; words=shuffle(wrongList); answers={}; wrongList=[]; currentPage=0; renderPage();}
-function resetQuiz(){words=shuffle(originalWords); answers={}; wrongList=[]; currentPage=0; renderPage();}
+                mongolItems.forEach((mWord, displayIdx) => {
+                    // Энэ монгол үг PAIRS доторх аль индекс болохыг олох (ижил тексттэй)
+                    const originalIndex = PAIRS.findIndex(p => p.mongol === mWord);
+                    const isMatched = Array.from(matchedMongolIndices).includes(originalIndex);
+                    const selectedClass = (selectedType === 'mongol' && selectedId === `m${displayIdx}`) ? 'selected' : '';
+                    const matchedClass = isMatched ? 'matched' : '';
 
-/* TIMER */
-function startTimer(){let mins=parseInt(document.getElementById("timeInput").value); if(isNaN(mins)||mins<=0){document.getElementById("timerBox").style.display='none'; return;}
-totalSeconds=mins*60; document.getElementById("timerBox").style.display='block'; updateTimer();
-if(timerInterval) clearInterval(timerInterval);
-timerInterval=setInterval(()=>{totalSeconds--; if(totalSeconds<0){clearInterval(timerInterval); checkAnswers(); alert("⏰ Дууслаа");} else updateTimer();},1000);}
-function updateTimer(){let m=Math.floor(totalSeconds/60); let s=totalSeconds%60; if(s<10)s="0"+s; document.getElementById("timer").innerHTML=m+":"+s;}
+                    const item = document.createElement('div');
+                    item.className = `word-item ${matchedClass} ${selectedClass}`;
+                    item.dataset.type = 'mongol';
+                    item.dataset.index = displayIdx;            // үзүүлэнгийн индекс
+                    item.dataset.originalIndex = originalIndex; // жинхэнэ PAIRS дахь индекс
+                    item.dataset.word = mWord;
+                    item.id = `m${displayIdx}`;
+                    item.innerHTML = `${mWord} <span class="status-icon">${isMatched ? '✅' : ''}</span>`;
+                    item.addEventListener('click', onWordClick);
+                    mongolDiv.appendChild(item);
+                });
+            }
 
-/* NAV */
-document.getElementById("startBtn").addEventListener("click",startQuiz);
-document.getElementById("resetBtn").addEventListener("click",resetQuiz);
-document.getElementById("prevBtn").addEventListener("click",()=>{if(currentPage>0){currentPage--; renderPage();}});
-document.getElementById("nextBtn").addEventListener("click",()=>{if(currentPage+1<getTotalPages()){currentPage++; renderPage();}});
-document.getElementById("checkBtn").addEventListener("click",checkAnswers);
-document.getElementById("retryBtn").addEventListener("click",retryWrong);
+            // Сонголт болон хослолын логик
+            function onWordClick(e) {
+                const target = e.currentTarget;
+                const type = target.dataset.type;
+                const idx = parseInt(target.dataset.index);
+                const originalIndex = type === 'mongol' ? parseInt(target.dataset.originalIndex) : idx;
 
-function updatePageInfo(){document.getElementById("pageInfo").innerHTML="Хуудас "+(currentPage+1)+" / "+getTotalPages();}
-function updateScoreboard(){let c=0,w=0; for(let i=0;i<words.length;i++){if(answers[i]===words[i][1]) c++; else if(answers[i]) w++; document.getElementById("scoreboard").innerHTML="✅ "+c+"/"+words.length+" | ❌ "+w;}
-</script>
+                // Хэрэв аль хэдийн хослогдсон бол дахин сонголт хийхгүй
+                if (type === 'english' && userMatches.hasOwnProperty(idx)) return;
+                if (type === 'mongol') {
+                    const alreadyMatched = Object.values(userMatches).includes(originalIndex);
+                    if (alreadyMatched) return;
+                }
 
+                // Сонголтыг арилгах эсвэл шинээр тэмдэглэх
+                if (selectedType === type && selectedId === target.id) {
+                    // Нэгэнт сонгосон элемент дээр дахин дарвал цуцлах
+                    clearSelection();
+                } else {
+                    // Өмнөх сонголтыг арилгаад шинийг сонгох
+                    clearSelection();
+                    // Шинэ сонголт тэмдэглэх
+                    selectedType = type;
+                    selectedId = target.id;
+                    target.classList.add('selected');
+                }
+
+                // Хэрэв англи ба монгол аль аль нь сонгогдсон бол хослуулах оролдлого хийнэ
+                if (selectedType !== null) {
+                    attemptMatch();
+                }
+            }
+
+            function attemptMatch() {
+                // Аль нэг төрлийн сонголт хоосон эсвэл хоёр төрөл сонгогдоогүй бол зогсох
+                if (!selectedType) return;
+
+                const selectedElem = document.getElementById(selectedId);
+                if (!selectedElem) return;
+
+                // Одоо сонгогдсон элемент байна. Нөгөө төрлийн сонгогдсон элементийг хайх
+                const otherType = selectedType === 'english' ? 'mongol' : 'english';
+                const otherSelected = document.querySelector(`.word-item.selected[data-type="${otherType}"]`);
+
+                if (!otherSelected) return; // Нөгөө тал сонгогдоогүй
+
+                // Хоёр тал сонгогдсон байна
+                const firstElem = selectedElem;
+                const secondElem = otherSelected;
+
+                const typeFirst = firstElem.dataset.type;
+                const typeSecond = secondElem.dataset.type;
+
+                // Заавал нэг англи, нэг монгол байх ёстой (тэгэхгүй бол сонголтыг цэвэрлэх)
+                if (typeFirst === typeSecond) {
+                    clearSelection(); // хоёр ижил төрөл сонгогдвол буруу тул цуцлах
+                    return;
+                }
+
+                // Англи, монголыг тодорхойл
+                let englishElem, mongolElem;
+                if (typeFirst === 'english') {
+                    englishElem = firstElem;
+                    mongolElem = secondElem;
+                } else {
+                    englishElem = secondElem;
+                    mongolElem = firstElem;
+                }
+
+                const englishIdx = parseInt(englishElem.dataset.index);
+                const mongolOriginalIdx = parseInt(mongolElem.dataset.originalIndex); // монголын жинхэнэ индекс (0-4)
+
+                // Урьдчилан шалгах: эдгээр аль хэдийн хослогдоогүй эсэх
+                if (userMatches.hasOwnProperty(englishIdx)) {
+                    clearSelection();
+                    return;
+                }
+                if (Object.values(userMatches).includes(mongolOriginalIdx)) {
+                    clearSelection();
+                    return;
+                }
+
+                // Хослолыг түр хадгалах (зөв эсэхийг дараа шалгана)
+                userMatches[englishIdx] = mongolOriginalIdx;
+
+                // Дэлгэцийг шинэчлэх
+                renderEnglish();
+                renderMongol();
+                updatePairsDisplay();
+                updateScore();
+                clearSelection(); // сонголтыг цэвэрлэх
+
+                // Бүх хослогдсон эсэх
+                if (Object.keys(userMatches).length === BASE_PAIRS) {
+                    messageBox.innerText = 'Бүх хослол хийгдлэ! Submit дарж дүнгээ баталгаажуулна уу.';
+                }
+            }
+
+            function clearSelection() {
+                if (selectedId) {
+                    const prev = document.getElementById(selectedId);
+                    if (prev) prev.classList.remove('selected');
+                }
+                selectedType = null;
+                selectedId = null;
+            }
+
+            // Хослолын статус дэлгэц
+            function updatePairsDisplay() {
+                if (Object.keys(userMatches).length === 0) {
+                    pairsDisplay.innerHTML = '<div class="pair-row" style="background:#f1f5f9;">👆 Дээрх үгнүүдийг хослуул</div>';
+                    return;
+                }
+
+                let htmlStr = '';
+                for (let engIdx in userMatches) {
+                    const monOrigIdx = userMatches[engIdx];
+                    const engWord = PAIRS[engIdx].english;
+                    const monWord = PAIRS[monOrigIdx].mongol; // эсвэл PAIRS[monOrigIdx].mongol
+                    const isCorrect = (correctPairs[engWord] === monWord);
+                    const checkSymbol = isCorrect ? '✅' : '❌';
+                    htmlStr += `<div class="pair-row">${engWord} <span class="pair-arrow">→</span> ${monWord} ${checkSymbol}</div>`;
+                }
+                pairsDisplay.innerHTML = htmlStr;
+            }
+
+            // Оноог тооцоолох (зөв хос бүрт 4 оноо)
+            function calculateScore() {
+                let correctCount = 0;
+                for (let engIdx in userMatches) {
+                    const monIdx = userMatches[engIdx];
+                    const engWord = PAIRS[engIdx].english;
+                    const monWord = PAIRS[monIdx].mongol;
+                    if (correctPairs[engWord] === monWord) {
+                        correctCount++;
+                    }
+                }
+                // Нийт оноо: зөв хос бүр 4 оноотой, дээд тал нь 20
+                return correctCount * 4;
+            }
+
+            function updateScore() {
+                const score = calculateScore();
+                scoreSpan.innerText = score;
+            }
+
+            // Submit үйлдэл - дүн харуулах
+            function submitTest() {
+                const totalPossible = TOTAL_SCORE; // 20
+                const earned = calculateScore();
+
+                let message = '';
+                if (Object.keys(userMatches).length < BASE_PAIRS) {
+                    message = `⏳ Та зөвхөн ${Object.keys(userMatches).length} хос хийсэн байна. Бүгдийг хослуулна уу. `;
+                } else {
+                    if (earned === totalPossible) {
+                        message = '🎉 Баяр хүргэе! Бүрэн зөв хариулсан байна.';
+                    } else {
+                        message = `📌 Таны дүн: ${earned}/${totalPossible}. Дахин оролдоод үзээрэй.`;
+                    }
+                }
+                messageBox.innerText = message || 'Тест дуусгахын тулд бүх үгийг хослуулна уу.';
+            }
+
+            // Тестийг эхнээс нь эхлүүлэх
+            function resetTest() {
+                userMatches = {};
+                selectedType = null;
+                selectedId = null;
+                // Монгол үгсийг дахин холих
+                mongolItems = PAIRS.map(p => p.mongol);
+                mongolItems = shuffleArray([...mongolItems]);
+                renderEnglish();
+                renderMongol();
+                updatePairsDisplay();
+                updateScore();
+                messageBox.innerText = '';
+            }
+
+            // Эхлүүлэх
+            function init() {
+                resetTest(); // эхний холилт
+                document.getElementById('submitBtn').addEventListener('click', submitTest);
+                document.getElementById('resetBtn').addEventListener('click', resetTest);
+            }
+
+            init();
+        })();
+    </script>
 </body>
 </html>
