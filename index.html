@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>English-Mongolian Drag & Drop Test</title>
+<title>English-Mongolian Drag & Drop</title>
 
 <style>
-body{font-family:Arial,sans-serif;max-width:1200px;margin:auto;padding:20px;background:#f0f4f8;}
+body{font-family:Arial;max-width:1200px;margin:auto;padding:20px;background:#f0f4f8;}
 h2{text-align:center;color:#1e3c5c;}
 .container{background:#fff;padding:20px;border-radius:20px;}
 .column{width:48%;float:left;margin:1%;}
@@ -57,11 +57,14 @@ var timerInterval,totalSeconds,currentPage=0;
 var PAGE_SIZE=5;
 var draggedValue=null;
 
-/* ---------------- CSV АВТОМАТААР УНШИХ ---------------- */
+/* ---------------- CSV АВТО УНШИХ ---------------- */
 
 window.onload=function(){
   fetch("word1.csv")
-  .then(res=>res.text())
+  .then(res=>{
+    if(!res.ok) throw new Error("CSV not found");
+    return res.text();
+  })
   .then(data=>{
     var lines=data.split(/\r?\n/);
     for(var i=0;i<lines.length;i++){
@@ -92,7 +95,7 @@ function shuffle(arr){
 
 function startQuiz(){
   if(originalWords.length===0){
-    alert("⚠️ CSV ачаалагдаагүй байна");
+    alert("⚠️ CSV ачаалагдаагүй");
     return;
   }
   words=shuffle(originalWords);
@@ -103,11 +106,33 @@ function startQuiz(){
   renderPage();
 }
 
+/* ---------------- PAGE LOGIC (СҮҮЛЧИЙН ХУУДАС НЭГТГЭХ) ---------------- */
+
+function getPageRange(page){
+  var total=words.length;
+  var totalPages=Math.ceil(total/PAGE_SIZE);
+
+  var start=page*PAGE_SIZE;
+  var end=start+PAGE_SIZE;
+
+  // Хэрэв сүүлийн хуудас 5-аас бага бол өмнөхтэй нэгтгэнэ
+  if(page===totalPages-1 && (total-start)<PAGE_SIZE){
+      start=Math.max(0,total-PAGE_SIZE*2);
+      end=total;
+  }
+
+  if(end>total) end=total;
+
+  return {start:start,end:end};
+}
+
 /* ---------------- RENDER ---------------- */
 
 function renderPage(){
-  var start=currentPage*PAGE_SIZE;
-  var end=Math.min(start+PAGE_SIZE,words.length);
+
+  var range=getPageRange(currentPage);
+  var start=range.start;
+  var end=range.end;
 
   var html='<div class="column"><h3>АНГЛИ</h3>';
 
@@ -132,7 +157,7 @@ function renderPage(){
   highlightAssigned();
 }
 
-/* ---------------- DRAG DROP ---------------- */
+/* ---------------- DRAG ---------------- */
 
 function drag(ev){ draggedValue=ev.target.innerHTML; }
 function allowDrop(ev){ ev.preventDefault(); }
@@ -155,8 +180,10 @@ function drop(ev){
 /* ---------------- CHECK ---------------- */
 
 function highlightAssigned(){
-  var start=currentPage*PAGE_SIZE;
-  var end=Math.min(start+PAGE_SIZE,words.length);
+
+  var range=getPageRange(currentPage);
+  var start=range.start;
+  var end=range.end;
 
   for(var i=start;i<end;i++){
     var div=document.getElementById("word-"+i);
@@ -177,6 +204,7 @@ function highlightAssigned(){
       }
     }
   }
+
   updateScoreboard();
 }
 
@@ -197,28 +225,39 @@ function checkAnswers(){
   }
 
   document.getElementById("result").innerHTML="📊 ОНОО: "+correct+"/"+words.length;
-  localStorage.setItem("lastScore",correct+"/"+words.length);
-  highlightAssigned();
 }
 
-function retryWrong(){
-  if(wrongList.length===0){
-    alert("❌ Буруу байхгүй");
-    return;
+/* ---------------- NAV ---------------- */
+
+function prevPage(){
+  if(currentPage>0){
+    currentPage--;
+    renderPage();
   }
-  words=shuffle(wrongList);
-  answers={};
-  wrongList=[];
-  currentPage=0;
-  renderPage();
 }
 
-function resetQuiz(){
-  words=shuffle(originalWords);
-  answers={};
-  wrongList=[];
-  currentPage=0;
-  renderPage();
+function nextPage(){
+  var totalPages=Math.ceil(words.length/PAGE_SIZE);
+  if(currentPage<totalPages-1){
+    currentPage++;
+    renderPage();
+  }
+}
+
+function updatePageInfo(){
+  var totalPages=Math.ceil(words.length/PAGE_SIZE);
+  document.getElementById("pageInfo").innerHTML="Хуудас "+(currentPage+1)+" / "+totalPages;
+}
+
+/* ---------------- SCORE ---------------- */
+
+function updateScoreboard(){
+  var c=0,w=0;
+  for(var i=0;i<words.length;i++){
+    if(answers[i]===words[i][1]) c++;
+    else if(answers[i]) w++;
+  }
+  document.getElementById("scoreboard").innerHTML="✅ "+c+"/"+words.length+" | ❌ "+w;
 }
 
 /* ---------------- TIMER ---------------- */
@@ -229,6 +268,7 @@ function startTimer(){
     document.getElementById("timerBox").style.display="none";
     return;
   }
+
   totalSeconds=mins*60;
   document.getElementById("timerBox").style.display="inline-block";
   updateTimer();
@@ -252,37 +292,6 @@ function updateTimer(){
   document.getElementById("timer").innerHTML=m+":"+s;
 }
 
-/* ---------------- NAV ---------------- */
-
-function prevPage(){
-  if(currentPage>0){
-    currentPage--;
-    renderPage();
-  }
-}
-
-function nextPage(){
-  if((currentPage+1)*PAGE_SIZE<words.length){
-    currentPage++;
-    renderPage();
-  }
-}
-
-function updatePageInfo(){
-  var totalPages=Math.ceil(words.length/PAGE_SIZE);
-  document.getElementById("pageInfo").innerHTML="Хуудас "+(currentPage+1)+" / "+totalPages;
-}
-
-function updateScoreboard(){
-  var c=0,w=0;
-  for(var i=0;i<words.length;i++){
-    if(answers[i]===words[i][1]) c++;
-    else if(answers[i]) w++;
-  }
-  document.getElementById("scoreboard").innerHTML="✅ "+c+"/"+words.length+" | ❌ "+w;
-}
-
 </script>
 </body>
 </html>
-
