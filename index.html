@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>English-Mongolian Click-to-Match Test</title>
+<title>English-Mongolian Touch Match</title>
 <style>
 body{font-family:Arial,sans-serif;margin:0;padding:15px;background:#f0f4f8;}
 h2{text-align:center;color:#1e3c5c;}
@@ -32,13 +32,13 @@ button:active{transform:scale(0.95);}
 </head>
 <body>
 
-<h2>English 🇲🇳 Mongolian Click-to-Match Test</h2>
+<h2>English 🇲🇳 Mongolian Touch Match Test</h2>
 
 <div class="container">
 
 <input type="number" id="timeInput" value="30" min="0"> мин
-<button onclick="startQuiz()">▶ Эхлэх</button>
-<button onclick="resetQuiz()">⟲ Шинэ эхлэх</button>
+<button id="startBtn">▶ Эхлэх</button>
+<button id="resetBtn">⟲ Шинэ эхлэх</button>
 
 <div id="timerBox">⏳ <span id="timer"></span></div>
 <div class="scoreboard" id="scoreboard">✅ 0/0 | ❌ 0</div>
@@ -46,99 +46,99 @@ button:active{transform:scale(0.95);}
 <div id="quiz"></div>
 
 <div>
-<button onclick="prevPage()">◀ Өмнөх</button>
+<button id="prevBtn">◀ Өмнөх</button>
 <span id="pageInfo"></span>
-<button onclick="nextPage()">Дараах ▶</button>
+<button id="nextBtn">Дараах ▶</button>
 </div>
 
-<button onclick="checkAnswers()">✅ Шалгах</button>
-<button onclick="retryWrong()">🔄 Буруу дахин</button>
+<button id="checkBtn">✅ Шалгах</button>
+<button id="retryBtn">🔄 Буруу дахин</button>
 
 <div id="result"></div>
 </div>
 
 <script>
-var words=[], originalWords=[], answers={}, wrongList=[];
-var timerInterval,totalSeconds,currentPage=0;
-var PAGE_SIZE=5;
-var selectedIndex=null;
+let words=[], originalWords=[], answers={}, wrongList=[];
+let timerInterval,totalSeconds,currentPage=0;
+let PAGE_SIZE=5;
+let selectedIndex=null;
 
 /* CSV LOAD */
 window.onload=function(){
   fetch("word1.csv")
   .then(res=>res.text())
   .then(data=>{
-    var lines=data.split(/\r?\n/);
-    for(var i=0;i<lines.length;i++){
-      var parts=lines[i].split(",");
-      if(parts.length>=2){
-        originalWords.push([parts[0].trim(),parts[1].trim()]);
-      }
+    const lines=data.split(/\r?\n/);
+    for(let i=0;i<lines.length;i++){
+      const parts=lines[i].split(",");
+      if(parts.length>=2) originalWords.push([parts[0].trim(),parts[1].trim()]);
     }
-  })
-  .catch(()=>alert("word1.csv олдсонгүй"));
+  }).catch(()=>alert("word1.csv олдсонгүй"));
 };
 
 /* SHUFFLE */
-function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function shuffle(arr){let a=arr.slice();for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;}
 
 /* START */
 function startQuiz(){
-  if(originalWords.length===0){alert("CSV ачаалагдаагүй байна"); return;}
+  if(originalWords.length===0){alert("CSV ачаалагдаагүй"); return;}
   words=shuffle(originalWords); answers={}; wrongList=[]; currentPage=0;
   startTimer(); renderPage();
 }
 
 /* PAGE LOGIC */
 function getTotalPages(){
-  var full=Math.floor(words.length/PAGE_SIZE);
-  var rem=words.length%PAGE_SIZE;
+  const full=Math.floor(words.length/PAGE_SIZE);
+  const rem=words.length%PAGE_SIZE;
   if(rem>0 && rem<5 && full>0) return full;
   return Math.ceil(words.length/PAGE_SIZE);
 }
 function getRange(page){
-  var total=getTotalPages();
+  const total=getTotalPages();
   if(page===total-1) return {start:(total-1)*PAGE_SIZE,end:words.length};
   return {start:page*PAGE_SIZE,end:page*PAGE_SIZE+PAGE_SIZE};
 }
 
 /* RENDER */
 function renderPage(){
-  var range=getRange(currentPage);
-  var html='<div class="columns"><div class="column"><h3>АНГЛИ</h3>';
-  for(var i=range.start;i<range.end;i++){
-    html+='<div class="english-item" onclick="selectTarget('+i+')" id="word-'+i+'">'+words[i][0]+'</div>';
+  const range=getRange(currentPage);
+  let html='<div class="columns"><div class="column"><h3>АНГЛИ</h3>';
+  for(let i=range.start;i<range.end;i++){
+    html+='<div class="english-item" id="word-'+i+'">'+words[i][0]+'</div>';
   }
   html+='</div><div class="column"><h3>МОНГОЛ</h3>';
-  var meanings=[]; for(var i=range.start;i<range.end;i++) meanings.push(words[i][1]);
+  let meanings=[]; for(let i=range.start;i<range.end;i++) meanings.push(words[i][1]);
   meanings=shuffle(meanings);
-  for(var i=0;i<meanings.length;i++){
-    html+='<div class="mongolian-item" onclick="selectMeaning(this)">'+meanings[i]+'</div>';
+  for(let i=0;i<meanings.length;i++){
+    html+='<div class="mongolian-item">'+meanings[i]+'</div>';
   }
   html+='</div></div>';
   document.getElementById("quiz").innerHTML=html;
-  highlightAssigned();
-  updatePageInfo();
-}
 
-/* CLICK TO MATCH */
-function selectTarget(i){selectedIndex=i;}
-function selectMeaning(el){
-  if(selectedIndex===null) return;
-  // Remove previous selection of this value
-  for(var k in answers){ if(answers[k]===el.innerText) delete answers[k]; }
-  answers[selectedIndex]=el.innerText;
-  selectedIndex=null;
-  highlightAssigned();
+  // Touch-friendly events
+  document.querySelectorAll('.english-item').forEach((el,i)=>{
+    el.addEventListener('touchstart',()=>{selectedIndex=i;});
+  });
+  document.querySelectorAll('.mongolian-item').forEach((el)=>{
+    el.addEventListener('touchstart',()=>{
+      if(selectedIndex===null) return;
+      for(let k in answers){if(answers[k]===el.innerText) delete answers[k];}
+      answers[selectedIndex]=el.innerText;
+      selectedIndex=null;
+      highlightAssigned();
+    });
+  });
+
+  highlightAssigned(); updatePageInfo();
 }
 
 /* HIGHLIGHT */
 function highlightAssigned(){
-  for(var i=0;i<words.length;i++){
-    var div=document.getElementById("word-"+i);
+  for(let i=0;i<words.length;i++){
+    const div=document.getElementById("word-"+i);
     if(!div) continue;
     div.classList.remove("correct","wrong");
-    var old=div.querySelector(".checkmark"); if(old) old.remove();
+    const old=div.querySelector(".checkmark"); if(old) old.remove();
     if(answers[i]){
       if(answers[i]===words[i][1]){div.classList.add("correct"); addCheck(div,"✅");}
       else{div.classList.add("wrong"); addCheck(div,"❌");}
@@ -146,28 +146,28 @@ function highlightAssigned(){
   }
   updateScoreboard();
 }
-function addCheck(el,sym){var sp=document.createElement("span");sp.className="checkmark";sp.innerHTML=sym;el.appendChild(sp);}
-function checkAnswers(){var correct=0; wrongList=[]; for(var i=0;i<words.length;i++){if(answers[i]===words[i][1]) correct++; else if(answers[i]) wrongList.push(words[i]); document.getElementById("result").innerHTML="📊 "+correct+"/"+words.length;}}
+function addCheck(el,sym){const sp=document.createElement("span"); sp.className="checkmark"; sp.innerHTML=sym; el.appendChild(sp);}
+function checkAnswers(){let correct=0; wrongList=[]; for(let i=0;i<words.length;i++){if(answers[i]===words[i][1]) correct++; else if(answers[i]) wrongList.push(words[i]); document.getElementById("result").innerHTML="📊 "+correct+"/"+words.length;}}
 function retryWrong(){if(wrongList.length===0) return; words=shuffle(wrongList); answers={}; wrongList=[]; currentPage=0; renderPage();}
 function resetQuiz(){words=shuffle(originalWords); answers={}; wrongList=[]; currentPage=0; renderPage();}
 
 /* TIMER */
-function startTimer(){
-  var mins=parseInt(document.getElementById("timeInput").value);
-  if(isNaN(mins)||mins<=0){document.getElementById("timerBox").style.display='none';return;}
-  totalSeconds=mins*60; document.getElementById("timerBox").style.display='block'; updateTimer();
-  if(timerInterval) clearInterval(timerInterval);
-  timerInterval=setInterval(function(){
-    totalSeconds--; if(totalSeconds<0){clearInterval(timerInterval);checkAnswers();alert("⏰ Дууслаа");}else updateTimer();
-  },1000);
-}
-function updateTimer(){var m=Math.floor(totalSeconds/60); var s=totalSeconds%60; if(s<10)s="0"+s; document.getElementById("timer").innerHTML=m+":"+s;}
+function startTimer(){let mins=parseInt(document.getElementById("timeInput").value); if(isNaN(mins)||mins<=0){document.getElementById("timerBox").style.display='none'; return;}
+totalSeconds=mins*60; document.getElementById("timerBox").style.display='block'; updateTimer();
+if(timerInterval) clearInterval(timerInterval);
+timerInterval=setInterval(()=>{totalSeconds--; if(totalSeconds<0){clearInterval(timerInterval); checkAnswers(); alert("⏰ Дууслаа");} else updateTimer();},1000);}
+function updateTimer(){let m=Math.floor(totalSeconds/60); let s=totalSeconds%60; if(s<10)s="0"+s; document.getElementById("timer").innerHTML=m+":"+s;}
 
 /* NAV */
-function prevPage(){if(currentPage>0){currentPage--;renderPage();}}
-function nextPage(){if(currentPage+1<getTotalPages()){currentPage++;renderPage();}}
+document.getElementById("startBtn").addEventListener("click",startQuiz);
+document.getElementById("resetBtn").addEventListener("click",resetQuiz);
+document.getElementById("prevBtn").addEventListener("click",()=>{if(currentPage>0){currentPage--; renderPage();}});
+document.getElementById("nextBtn").addEventListener("click",()=>{if(currentPage+1<getTotalPages()){currentPage++; renderPage();}});
+document.getElementById("checkBtn").addEventListener("click",checkAnswers);
+document.getElementById("retryBtn").addEventListener("click",retryWrong);
+
 function updatePageInfo(){document.getElementById("pageInfo").innerHTML="Хуудас "+(currentPage+1)+" / "+getTotalPages();}
-function updateScoreboard(){var c=0,w=0;for(var i=0;i<words.length;i++){if(answers[i]===words[i][1]) c++; else if(answers[i]) w++;} document.getElementById("scoreboard").innerHTML="✅ "+c+"/"+words.length+" | ❌ "+w;}
+function updateScoreboard(){let c=0,w=0; for(let i=0;i<words.length;i++){if(answers[i]===words[i][1]) c++; else if(answers[i]) w++; document.getElementById("scoreboard").innerHTML="✅ "+c+"/"+words.length+" | ❌ "+w;}
 </script>
 
 </body>
