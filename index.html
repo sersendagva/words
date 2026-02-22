@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Харгалзуулах тест</title>
+    <title>Харгалзуулах тест - Зассан</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,593 +13,562 @@
 
         body {
             font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
-            background: linear-gradient(145deg, #f5f7fa 0%, #e9ecf0 100%);
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 16px;
-            margin: 0;
         }
 
         .test-container {
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
-            background: rgba(255,255,255,0.75);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 48px 48px 32px 32px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.6);
-            padding: 24px 20px 32px;
-            border: 1px solid rgba(255,255,255,0.5);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            padding: 24px 20px;
+            backdrop-filter: blur(10px);
         }
 
         h1 {
             font-size: 2rem;
-            font-weight: 600;
-            color: #1e293b;
+            color: #2d3748;
             text-align: center;
-            letter-spacing: -0.02em;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         h1 span {
-            background: #f1f5f9;
-            padding: 4px 16px;
-            border-radius: 100px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #334155;
-            border: 1px solid #cbd5e1;
+            background: #edf2f7;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 1rem;
+            color: #4a5568;
         }
 
         .subhead {
             text-align: center;
-            color: #475569;
-            margin-bottom: 32px;
+            color: #718096;
+            margin-bottom: 30px;
             font-style: italic;
-            border-bottom: 2px dashed #94a3b8;
-            padding-bottom: 16px;
-            font-size: 1.1rem;
+            border-bottom: 2px dashed #cbd5e0;
+            padding-bottom: 15px;
         }
 
-        .match-grid {
+        .game-area {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 20px;
             justify-content: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .column {
-            flex: 1 1 260px;
-            min-width: 240px;
-            background: #ffffffcc;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border-radius: 32px;
-            padding: 20px 12px;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);
-            border: 1px solid #ffffff;
+            flex: 1 1 280px;
+            background: #f7fafc;
+            border-radius: 30px;
+            padding: 20px 15px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+            border: 2px solid #e2e8f0;
         }
 
         .column h2 {
             font-size: 1.5rem;
-            font-weight: 500;
-            color: #0f172a;
-            border-left: 10px solid #3b82f6;
-            padding-left: 16px;
-            margin-bottom: 24px;
+            color: #2d3748;
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 8px solid #4299e1;
         }
 
         .column:first-child h2 {
-            border-left-color: #ef4444;
+            border-left-color: #ed8936;
         }
 
         .word-list {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
         }
 
-        .word-item {
+        .word-card {
             background: white;
-            border-radius: 60px;
-            padding: 16px 18px;
-            font-size: 1.35rem;
-            font-weight: 550;
-            box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.06);
-            border: 2px solid transparent;
-            transition: all 0.15s ease;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            border-radius: 20px;
+            padding: 18px 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1a202c;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 3px solid transparent;
+            transition: all 0.2s ease;
             cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             user-select: none;
-            color: #1e293b;
         }
 
-        .column:first-child .word-item {
-            background: #fef2f2;
-            border-color: #fecaca;
+        .column:first-child .word-card {
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
         }
 
-        .column:last-child .word-item {
-            background: #f0f9ff;
-            border-color: #bae6fd;
+        .column:last-child .word-card {
+            background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
         }
 
-        .word-item.selected {
-            border: 4px solid #f97316;
-            background: #fff7ed;
+        .word-card.selected {
+            border: 4px solid #f6ad55;
             transform: scale(1.02);
-            box-shadow: 0 12px 20px -12px #f97316;
+            box-shadow: 0 10px 15px -3px rgba(246, 173, 85, 0.3);
         }
 
-        .word-item.matched {
-            opacity: 0.5;
+        .word-card.matched {
+            opacity: 0.6;
             pointer-events: none;
-            filter: grayscale(0.6);
-            border-color: #86efac;
-            background: #f0fdf4;
-            text-decoration: line-through 2px #22c55e;
+            border-color: #48bb78;
+            background: #f0fff4;
+            text-decoration: line-through 2px #48bb78;
+            filter: grayscale(0.3);
         }
 
-        .word-item .status-icon {
-            font-size: 1.4rem;
-            margin-left: 8px;
+        .word-card.matched::after {
+            content: "✓";
+            font-size: 1.5rem;
+            color: #48bb78;
+            font-weight: bold;
         }
 
-        .pairing-status {
+        .pairs-preview {
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #d53a9d;
+            min-height: 80px;
+        }
+
+        .pairs-title {
+            font-size: 1.2rem;
+            color: #553c9a;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .pairs-grid {
             display: flex;
             flex-wrap: wrap;
+            gap: 12px;
             justify-content: center;
-            gap: 28px;
-            background: #f8fafc;
-            border-radius: 48px;
-            padding: 24px 16px;
-            margin: 16px 0 28px;
-            border: 2px solid #e2e8f0;
         }
 
-        .pair-row {
+        .pair-badge {
+            background: #fefcbf;
+            border: 2px solid #d69e2e;
+            border-radius: 40px;
+            padding: 10px 20px;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 1.2rem;
-            background: white;
-            padding: 8px 22px;
-            border-radius: 40px;
-            box-shadow: 0 2px 6px #cbd5e1;
+            gap: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .pair-badge.correct {
+            background: #c6f6d5;
+            border-color: #38a169;
+        }
+
+        .pair-badge.incorrect {
+            background: #fed7d7;
+            border-color: #e53e3e;
         }
 
         .pair-arrow {
-            font-size: 1.8rem;
-            color: #3b82f6;
+            font-size: 1.3rem;
+            color: #718096;
         }
 
-        .score-box {
+        .score-container {
+            background: #2d3748;
+            border-radius: 50px;
+            padding: 15px 30px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 20px;
-            background: #1e293b;
+            margin: 25px 0;
             color: white;
-            padding: 16px 32px;
-            border-radius: 60px;
-            margin: 28px 0 18px;
-            font-weight: 600;
-            font-size: 1.8rem;
-            letter-spacing: 1px;
-            border: 2px solid #facc15;
-        }
-
-        .score-box span {
-            background: #facc15;
-            color: #0f172a;
-            padding: 8px 30px;
-            border-radius: 40px;
-            font-size: 2.2rem;
-            min-width: 80px;
-            text-align: center;
-        }
-
-        .btn-group {
-            display: flex;
+            font-size: 1.5rem;
+            font-weight: bold;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 24px;
         }
 
-        button {
-            background: white;
+        .score-number {
+            background: #fbbf24;
+            color: #1a202c;
+            padding: 10px 30px;
+            border-radius: 40px;
+            font-size: 2rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
             border: none;
-            padding: 18px 40px;
-            font-size: 1.4rem;
+            padding: 16px 40px;
+            font-size: 1.2rem;
             font-weight: 600;
-            border-radius: 60px;
-            background: #e2e8f0;
-            color: #1e293b;
-            box-shadow: 0 6px 0 #94a3b8;
+            border-radius: 50px;
             cursor: pointer;
-            transition: 0.07s linear;
-            border: 2px solid #f8fafc;
-            flex: 1 1 auto;
+            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 5px 0 #718096;
+            border: 2px solid white;
             min-width: 200px;
         }
 
-        button:active {
+        .btn:active {
             transform: translateY(5px);
-            box-shadow: 0 1px 0 #64748b;
+            box-shadow: none;
         }
 
-        #submitBtn {
-            background: #facc15;
-            box-shadow: 0 6px 0 #b45309;
-            color: #0f172a;
+        .btn-submit {
+            background: #fbbf24;
+            color: #1a202c;
+            box-shadow: 0 5px 0 #b45309;
         }
 
-        #resetBtn {
-            background: #cbd5e1;
+        .btn-reset {
+            background: #a0aec0;
+            color: #1a202c;
+            box-shadow: 0 5px 0 #4a5568;
         }
 
         .message {
             text-align: center;
-            font-size: 1.3rem;
-            margin: 16px auto 0;
-            padding: 16px;
-            border-radius: 40px;
-            background: #f1f5f9;
-            color: #164e63;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 30px;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 1.1rem;
             font-weight: 500;
         }
 
-        /* Mobile friendly touch */
         @media (max-width: 600px) {
-            .test-container { padding: 16px; }
-            .word-item { font-size: 1.2rem; padding: 14px 16px; }
-            .pair-row { font-size: 1rem; }
-            button { padding: 14px 20px; font-size: 1.2rem; }
+            .word-card { font-size: 1.1rem; padding: 15px; }
+            .btn { padding: 12px 20px; min-width: 150px; }
         }
     </style>
 </head>
 <body>
     <div class="test-container">
         <h1>
-            🧩 Харгалзуулах тест
-            <span>гар/комп</span>
+            🎯 Харгалзуулах тест
+            <span>гар утас | компьютер</span>
         </h1>
-        <div class="subhead">Англи үгэнд тохирох монгол хэллэгийг сонго</div>
+        <div class="subhead">Англи үгэнд тохирох монгол орчуулгыг хослуул</div>
 
-        <!-- Үндсэн харгалзуулах хэсэг -->
-        <div class="match-grid">
+        <div class="game-area">
             <!-- Англи багана -->
             <div class="column">
-                <h2>🇬🇧 English</h2>
-                <div class="word-list" id="englishList"></div>
+                <h2>🇬🇧 ENGLISH</h2>
+                <div class="word-list" id="englishColumn"></div>
             </div>
 
             <!-- Монгол багана -->
             <div class="column">
-                <h2>🇲🇨 Монгол</h2>
-                <div class="word-list" id="mongolList"></div>
+                <h2>🇲🇳 МОНГОЛ</h2>
+                <div class="word-list" id="mongolColumn"></div>
             </div>
         </div>
 
-        <!-- Хослолын төлөв харах хэсэг (динамик) -->
-        <div id="pairsDisplay" class="pairing-status">
-            <!-- энд хосолсон хосууд гарч ирнэ -->
+        <!-- Хослолуудын харагдац -->
+        <div class="pairs-preview">
+            <div class="pairs-title">📋 Таны хослолууд:</div>
+            <div class="pairs-grid" id="pairsContainer"></div>
         </div>
 
-        <!-- Оноо -->
-        <div class="score-box">
-            📊 Оноо: <span id="scoreValue">0</span> / 20
+        <!-- Онооны самбар -->
+        <div class="score-container">
+            <span>🏆 Оноо:</span>
+            <span class="score-number" id="scoreDisplay">0</span>
+            <span>/ 20</span>
         </div>
 
         <!-- Товчнууд -->
-        <div class="btn-group">
-            <button id="submitBtn">✅ Submit</button>
-            <button id="resetBtn">🔄 Дахин эхлэх</button>
+        <div class="button-group">
+            <button class="btn btn-submit" id="submitBtn">✅ SUBMIT</button>
+            <button class="btn btn-reset" id="resetBtn">🔄 ДАХИН ЭХЛЭХ</button>
         </div>
 
-        <div id="messageBox" class="message"></div>
+        <!-- Мэдээллийн хэсэг -->
+        <div class="message" id="messageBox"></div>
     </div>
 
     <script>
-        (function() {
-            // Өгөгдөл: англи үг -> монгол орчуулга (тохирох жагсаалт)
-            const PAIRS = [
-                { english: "Break", mongol: "эвдэх" },
-                { english: "Sour", mongol: "исгэлэн" },
-                { english: "Replace", mongol: "орлуулах, солих" },
-                { english: "Hide", mongol: "нуух" },
-                { english: "Explain", mongol: "тайлбарлах" }
-            ];
+        // Анхны өгөгдөл
+        const wordPairs = [
+            { english: "Break", mongol: "эвдэх" },
+            { english: "Sour", mongol: "исгэлэн" },
+            { english: "Replace", mongol: "орлуулах, солих" },
+            { english: "Hide", mongol: "нуух" },
+            { english: "Explain", mongol: "тайлбарлах" }
+        ];
 
-            // Нийт хосын тоо (20 гэх боловч энд 5 байна. 20 болгох бол хүснэгтээ сунгах эсвэл хуурамчаар давхарлах)
-            // Хэрэглэгчийн өгсөн зурагт 20 гэж бичсэн тул бид 5 хосыг 4 удаа давтан харуулж 20 болгоно (тохируулах боломжтой)
-            // Энгийн төлөв: яг 5 хос, гэхдээ оноог 20 хүртэл тооцох болно.
-            // Илүү их дасгал хийхийн тулд PAIRS өгөгдлийг өргөтгөж болно. Одоогоор 5 хос, оноог 20 болгох үндэслэл: давтах эсвэл оноог 5-аар 20 болгох.
-            // Бид энэ тестийг 5 хос дээр үндэслээд оноог 20 болгохын тулд хамгийн их оноог 20 гэж тохируулна.
-            // 5 хос бүр 4 оноотой байхаар (нийт 20) эсвэл илүү олон хос хийж болно. 
-            // Төгс байлгахын тулд PAIRS дээр нэмэлт 15 хос нэмэх шаардлагатай, гэхдээ зурагт байгаа үгс л харагдаж байгаа.
-            // Энэ загварт зөвхөн 5 хос байх боловч онооны дээд хязгаарыг 20 болгоё (хэрэглэгч 5-ыг зөв хийвэл 20 оноо авна). Эсвэл 20 хос болгохын тулд өгөгдлийг өргөжүүлэх.
-            // Бид хэрэглэгчийн зургийг хүндэтгэж 20 оноо харуулахын тулд доор totalPossibleScore = 20 гэж тохируулна. Хосууд 5 ч гэсэн тус бүр 4 оноотой гэж үзнэ. Гэхдээ дүгнэлт нь ойлгомжтой болгохын тулд 5 үндсэн хос, оноог 20 болгон харуулъя. Доор логик: зөв хос бүрд 4 оноо өгнө (5*4=20).
+        // Тоглоомын төлөв
+        let state = {
+            selectedCard: null,           // Сонгогдсон карт { type, index, element }
+            matches: {},                    // Хослолууд { englishIndex: mongolIndex }
+            mongolOrder: [],                // Монгол үгсийн санамсаргүй дараалал
+            englishOrder: []                 // Англи үгсийн дараалал (анхны)
+        };
+
+        // DOM элементүүд
+        const englishCol = document.getElementById('englishColumn');
+        const mongolCol = document.getElementById('mongolColumn');
+        const pairsContainer = document.getElementById('pairsContainer');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const messageBox = document.getElementById('messageBox');
+        const submitBtn = document.getElementById('submitBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // Монгол үгсийн дарааллыг холих
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Тоглоомыг эхлүүлэх
+        function initGame() {
+            // Англи үгсийн дараалал (анхны дарааллаар)
+            state.englishOrder = wordPairs.map((pair, index) => ({
+                word: pair.english,
+                originalIndex: index
+            }));
+
+            // Монгол үгсийн дарааллыг холих
+            const mongolWords = wordPairs.map((pair, index) => ({
+                word: pair.mongol,
+                originalIndex: index
+            }));
+            state.mongolOrder = shuffleArray(mongolWords);
             
-            const TOTAL_SCORE = 20;          // Нийт боломжит оноо
-            const BASE_PAIRS = PAIRS.length; // 5
+            // Сонголтыг цэвэрлэх
+            state.selectedCard = null;
+            state.matches = {};
+            
+            // Дэлгэцийг шинэчлэх
+            renderGame();
+            updatePairsDisplay();
+            updateScore();
+            messageBox.innerHTML = '';
+        }
 
-            // Төлөв
-            let selectedType = null;          // 'english' эсвэл 'mongol'
-            let selectedId = null;            // сонгосон элементийн ID (жишээ нь `e0`, `m2` ...)
-            let matches = {};                  // хосолсон хосууд { englishIndex: mongolIndex, ... } - энэ нь зөвхөн зөв хослолыг хадгална
-            let userMatches = {};               // хэрэглэгчийн хийсэн хослол { englishIndex: mongolIndex } (зөв эсэхээс үл хамаарч)
-            let correctPairs = {};               // зөв хариултыг хурдан шалгах lookup: english -> mongol (цорын ганц)
+        // Карт дээр дарах үйлдэл
+        function handleCardClick(type, index, originalIndex) {
+            // Хэрэв карт аль хэдийн хослогдсон бол сонголт хийхгүй
+            if (type === 'english') {
+                if (state.matches.hasOwnProperty(index)) return;
+            } else {
+                if (Object.values(state.matches).includes(originalIndex)) return;
+            }
 
-            // Баганын элементүүд
-            const englishDiv = document.getElementById('englishList');
-            const mongolDiv = document.getElementById('mongolList');
-            const pairsDisplay = document.getElementById('pairsDisplay');
-            const scoreSpan = document.getElementById('scoreValue');
-            const messageBox = document.getElementById('messageBox');
+            // Хэрэв сонгогдсон карт байхгүй бол
+            if (!state.selectedCard) {
+                // Шинэ карт сонгох
+                state.selectedCard = { type, index, originalIndex };
+                renderGame();
+                return;
+            }
 
-            // Зөв хариултын lookup хийх
-            PAIRS.forEach((p, idx) => {
-                correctPairs[p.english] = p.mongol;   // англи үг -> монгол текст
+            // Хэрэв сонгогдсон карт байгаа бол
+            const first = state.selectedCard;
+            
+            // Нэг төрлийн карт сонгосон бол (жишээ нь англи-англи)
+            if (first.type === type) {
+                // Сонголтыг шинэчлэх
+                state.selectedCard = { type, index, originalIndex };
+                renderGame();
+                return;
+            }
+
+            // Англи-Монгол хослол хийх
+            let englishIndex, mongolOriginalIndex;
+            
+            if (first.type === 'english') {
+                englishIndex = first.index;
+                mongolOriginalIndex = originalIndex;
+            } else {
+                englishIndex = index;
+                mongolOriginalIndex = first.originalIndex;
+            }
+
+            // Хослол хийх боломжтой эсэх
+            const isEnglishMatched = state.matches.hasOwnProperty(englishIndex);
+            const isMongolMatched = Object.values(state.matches).includes(mongolOriginalIndex);
+
+            if (!isEnglishMatched && !isMongolMatched) {
+                // Хослолыг хадгалах
+                state.matches[englishIndex] = mongolOriginalIndex;
+            }
+
+            // Сонголтыг арилгах
+            state.selectedCard = null;
+            
+            // Дэлгэцийг шинэчлэх
+            renderGame();
+            updatePairsDisplay();
+            updateScore();
+        }
+
+        // Англи баганыг зурах
+        function renderEnglish() {
+            englishCol.innerHTML = '';
+            
+            state.englishOrder.forEach((item, displayIndex) => {
+                const originalIndex = item.originalIndex;
+                const isMatched = state.matches.hasOwnProperty(displayIndex);
+                const isSelected = state.selectedCard && 
+                                  state.selectedCard.type === 'english' && 
+                                  state.selectedCard.index === displayIndex;
+                
+                const card = document.createElement('div');
+                card.className = `word-card ${isMatched ? 'matched' : ''} ${isSelected ? 'selected' : ''}`;
+                card.textContent = item.word;
+                
+                card.addEventListener('click', () => {
+                    handleCardClick('english', displayIndex, originalIndex);
+                });
+                
+                englishCol.appendChild(card);
             });
+        }
 
-            // Анхны өгөгдлийг санамсаргүйгээр холих (монгол хэсгийг)
-            function shuffleArray(arr) {
-                for (let i = arr.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [arr[i], arr[j]] = [arr[j], arr[i]];
-                }
-                return arr;
-            }
-
-            // Монгол үгсийн дараалал: PAIRS-оос монгол хэсгийг аваад холино
-            let mongolItems = PAIRS.map(p => p.mongol);
-            mongolItems = shuffleArray([...mongolItems]);
-
-            // Дэлгэцэнд англи үгс (дараалал нь хэвээр)
-            function renderEnglish() {
-                englishDiv.innerHTML = '';
-                PAIRS.forEach((pair, idx) => {
-                    const eWord = pair.english;
-                    const isMatched = userMatches.hasOwnProperty(idx); // энэ англи үг хослогдсон эсэх
-                    const matchedClass = isMatched ? 'matched' : '';
-                    const selectedClass = (selectedType === 'english' && selectedId === `e${idx}`) ? 'selected' : '';
-                    const item = document.createElement('div');
-                    item.className = `word-item ${matchedClass} ${selectedClass}`;
-                    item.dataset.type = 'english';
-                    item.dataset.index = idx;
-                    item.dataset.word = eWord;
-                    item.id = `e${idx}`;
-                    item.innerHTML = `${eWord} <span class="status-icon">${isMatched ? '✅' : ''}</span>`;
-                    item.addEventListener('click', onWordClick);
-                    englishDiv.appendChild(item);
+        // Монгол баганыг зурах
+        function renderMongol() {
+            mongolCol.innerHTML = '';
+            
+            state.mongolOrder.forEach((item, displayIndex) => {
+                const originalIndex = item.originalIndex;
+                const isMatched = Object.values(state.matches).includes(originalIndex);
+                const isSelected = state.selectedCard && 
+                                  state.selectedCard.type === 'mongol' && 
+                                  state.selectedCard.index === displayIndex;
+                
+                const card = document.createElement('div');
+                card.className = `word-card ${isMatched ? 'matched' : ''} ${isSelected ? 'selected' : ''}`;
+                card.textContent = item.word;
+                
+                card.addEventListener('click', () => {
+                    handleCardClick('mongol', displayIndex, originalIndex);
                 });
+                
+                mongolCol.appendChild(card);
+            });
+        }
+
+        // Тоглоомыг зурах
+        function renderGame() {
+            renderEnglish();
+            renderMongol();
+        }
+
+        // Хослолуудын дэлгэцийг шинэчлэх
+        function updatePairsDisplay() {
+            if (Object.keys(state.matches).length === 0) {
+                pairsContainer.innerHTML = '<div style="color: #a0aec0; text-align: center;">⟳ Хослол хийгээгүй байна</div>';
+                return;
             }
 
-            function renderMongol() {
-                mongolDiv.innerHTML = '';
-                // Хэрэглэгчийн хосолсон монгол үзүүлэлт: аль монгол индекс аль англитай хосолсоныг урвуу lookup хэрэгтэй
-                const matchedMongolIndices = new Set(Object.values(userMatches)); 
+            pairsContainer.innerHTML = '';
+            
+            Object.entries(state.matches).forEach(([engDisplayIndex, monOriginalIndex]) => {
+                const engWord = state.englishOrder[engDisplayIndex].word;
+                const monWord = wordPairs[monOriginalIndex].mongol;
+                
+                // Зөв эсэхийг шалгах
+                const correctMongol = wordPairs[parseInt(engDisplayIndex)].mongol;
+                const isCorrect = (monWord === correctMongol);
+                
+                const pairDiv = document.createElement('div');
+                pairDiv.className = `pair-badge ${isCorrect ? 'correct' : 'incorrect'}`;
+                pairDiv.innerHTML = `
+                    <span>${engWord}</span>
+                    <span class="pair-arrow">→</span>
+                    <span>${monWord}</span>
+                    <span>${isCorrect ? '✓' : '✗'}</span>
+                `;
+                
+                pairsContainer.appendChild(pairDiv);
+            });
+        }
 
-                mongolItems.forEach((mWord, displayIdx) => {
-                    // Энэ монгол үг PAIRS доторх аль индекс болохыг олох (ижил тексттэй)
-                    const originalIndex = PAIRS.findIndex(p => p.mongol === mWord);
-                    const isMatched = Array.from(matchedMongolIndices).includes(originalIndex);
-                    const selectedClass = (selectedType === 'mongol' && selectedId === `m${displayIdx}`) ? 'selected' : '';
-                    const matchedClass = isMatched ? 'matched' : '';
-
-                    const item = document.createElement('div');
-                    item.className = `word-item ${matchedClass} ${selectedClass}`;
-                    item.dataset.type = 'mongol';
-                    item.dataset.index = displayIdx;            // үзүүлэнгийн индекс
-                    item.dataset.originalIndex = originalIndex; // жинхэнэ PAIRS дахь индекс
-                    item.dataset.word = mWord;
-                    item.id = `m${displayIdx}`;
-                    item.innerHTML = `${mWord} <span class="status-icon">${isMatched ? '✅' : ''}</span>`;
-                    item.addEventListener('click', onWordClick);
-                    mongolDiv.appendChild(item);
-                });
-            }
-
-            // Сонголт болон хослолын логик
-            function onWordClick(e) {
-                const target = e.currentTarget;
-                const type = target.dataset.type;
-                const idx = parseInt(target.dataset.index);
-                const originalIndex = type === 'mongol' ? parseInt(target.dataset.originalIndex) : idx;
-
-                // Хэрэв аль хэдийн хослогдсон бол дахин сонголт хийхгүй
-                if (type === 'english' && userMatches.hasOwnProperty(idx)) return;
-                if (type === 'mongol') {
-                    const alreadyMatched = Object.values(userMatches).includes(originalIndex);
-                    if (alreadyMatched) return;
+        // Оноог тооцоолох
+        function calculateScore() {
+            let correctCount = 0;
+            
+            Object.entries(state.matches).forEach(([engDisplayIndex, monOriginalIndex]) => {
+                const engWord = state.englishOrder[engDisplayIndex].word;
+                const monWord = wordPairs[monOriginalIndex].mongol;
+                const correctMongol = wordPairs[parseInt(engDisplayIndex)].mongol;
+                
+                if (monWord === correctMongol) {
+                    correctCount++;
                 }
+            });
+            
+            // Зөв хос бүрт 4 оноо (5 хос * 4 = 20)
+            return correctCount * 4;
+        }
 
-                // Сонголтыг арилгах эсвэл шинээр тэмдэглэх
-                if (selectedType === type && selectedId === target.id) {
-                    // Нэгэнт сонгосон элемент дээр дахин дарвал цуцлах
-                    clearSelection();
+        // Оноог шинэчлэх
+        function updateScore() {
+            const score = calculateScore();
+            scoreDisplay.textContent = score;
+        }
+
+        // SUBMIT товч
+        function handleSubmit() {
+            const matchedCount = Object.keys(state.matches).length;
+            const score = calculateScore();
+            
+            if (matchedCount < wordPairs.length) {
+                messageBox.innerHTML = `⚠️ Та зөвхөн ${matchedCount} хос хийсэн байна. Бүх 5 хосыг хийж гүйцээнэ үү.`;
+            } else {
+                if (score === 20) {
+                    messageBox.innerHTML = '🎉 БАЯР ХҮРГЭЕ! Та бүх хосыг зөв хийлээ.';
                 } else {
-                    // Өмнөх сонголтыг арилгаад шинийг сонгох
-                    clearSelection();
-                    // Шинэ сонголт тэмдэглэх
-                    selectedType = type;
-                    selectedId = target.id;
-                    target.classList.add('selected');
-                }
-
-                // Хэрэв англи ба монгол аль аль нь сонгогдсон бол хослуулах оролдлого хийнэ
-                if (selectedType !== null) {
-                    attemptMatch();
+                    messageBox.innerHTML = `📊 Таны оноо: ${score}/20. Дахин оролдоод үзээрэй!`;
                 }
             }
+        }
 
-            function attemptMatch() {
-                // Аль нэг төрлийн сонголт хоосон эсвэл хоёр төрөл сонгогдоогүй бол зогсох
-                if (!selectedType) return;
+        // RESET товч
+        function handleReset() {
+            initGame();
+        }
 
-                const selectedElem = document.getElementById(selectedId);
-                if (!selectedElem) return;
+        // Эвент сонсогчид
+        submitBtn.addEventListener('click', handleSubmit);
+        resetBtn.addEventListener('click', handleReset);
 
-                // Одоо сонгогдсон элемент байна. Нөгөө төрлийн сонгогдсон элементийг хайх
-                const otherType = selectedType === 'english' ? 'mongol' : 'english';
-                const otherSelected = document.querySelector(`.word-item.selected[data-type="${otherType}"]`);
-
-                if (!otherSelected) return; // Нөгөө тал сонгогдоогүй
-
-                // Хоёр тал сонгогдсон байна
-                const firstElem = selectedElem;
-                const secondElem = otherSelected;
-
-                const typeFirst = firstElem.dataset.type;
-                const typeSecond = secondElem.dataset.type;
-
-                // Заавал нэг англи, нэг монгол байх ёстой (тэгэхгүй бол сонголтыг цэвэрлэх)
-                if (typeFirst === typeSecond) {
-                    clearSelection(); // хоёр ижил төрөл сонгогдвол буруу тул цуцлах
-                    return;
-                }
-
-                // Англи, монголыг тодорхойл
-                let englishElem, mongolElem;
-                if (typeFirst === 'english') {
-                    englishElem = firstElem;
-                    mongolElem = secondElem;
-                } else {
-                    englishElem = secondElem;
-                    mongolElem = firstElem;
-                }
-
-                const englishIdx = parseInt(englishElem.dataset.index);
-                const mongolOriginalIdx = parseInt(mongolElem.dataset.originalIndex); // монголын жинхэнэ индекс (0-4)
-
-                // Урьдчилан шалгах: эдгээр аль хэдийн хослогдоогүй эсэх
-                if (userMatches.hasOwnProperty(englishIdx)) {
-                    clearSelection();
-                    return;
-                }
-                if (Object.values(userMatches).includes(mongolOriginalIdx)) {
-                    clearSelection();
-                    return;
-                }
-
-                // Хослолыг түр хадгалах (зөв эсэхийг дараа шалгана)
-                userMatches[englishIdx] = mongolOriginalIdx;
-
-                // Дэлгэцийг шинэчлэх
-                renderEnglish();
-                renderMongol();
-                updatePairsDisplay();
-                updateScore();
-                clearSelection(); // сонголтыг цэвэрлэх
-
-                // Бүх хослогдсон эсэх
-                if (Object.keys(userMatches).length === BASE_PAIRS) {
-                    messageBox.innerText = 'Бүх хослол хийгдлэ! Submit дарж дүнгээ баталгаажуулна уу.';
-                }
-            }
-
-            function clearSelection() {
-                if (selectedId) {
-                    const prev = document.getElementById(selectedId);
-                    if (prev) prev.classList.remove('selected');
-                }
-                selectedType = null;
-                selectedId = null;
-            }
-
-            // Хослолын статус дэлгэц
-            function updatePairsDisplay() {
-                if (Object.keys(userMatches).length === 0) {
-                    pairsDisplay.innerHTML = '<div class="pair-row" style="background:#f1f5f9;">👆 Дээрх үгнүүдийг хослуул</div>';
-                    return;
-                }
-
-                let htmlStr = '';
-                for (let engIdx in userMatches) {
-                    const monOrigIdx = userMatches[engIdx];
-                    const engWord = PAIRS[engIdx].english;
-                    const monWord = PAIRS[monOrigIdx].mongol; // эсвэл PAIRS[monOrigIdx].mongol
-                    const isCorrect = (correctPairs[engWord] === monWord);
-                    const checkSymbol = isCorrect ? '✅' : '❌';
-                    htmlStr += `<div class="pair-row">${engWord} <span class="pair-arrow">→</span> ${monWord} ${checkSymbol}</div>`;
-                }
-                pairsDisplay.innerHTML = htmlStr;
-            }
-
-            // Оноог тооцоолох (зөв хос бүрт 4 оноо)
-            function calculateScore() {
-                let correctCount = 0;
-                for (let engIdx in userMatches) {
-                    const monIdx = userMatches[engIdx];
-                    const engWord = PAIRS[engIdx].english;
-                    const monWord = PAIRS[monIdx].mongol;
-                    if (correctPairs[engWord] === monWord) {
-                        correctCount++;
-                    }
-                }
-                // Нийт оноо: зөв хос бүр 4 оноотой, дээд тал нь 20
-                return correctCount * 4;
-            }
-
-            function updateScore() {
-                const score = calculateScore();
-                scoreSpan.innerText = score;
-            }
-
-            // Submit үйлдэл - дүн харуулах
-            function submitTest() {
-                const totalPossible = TOTAL_SCORE; // 20
-                const earned = calculateScore();
-
-                let message = '';
-                if (Object.keys(userMatches).length < BASE_PAIRS) {
-                    message = `⏳ Та зөвхөн ${Object.keys(userMatches).length} хос хийсэн байна. Бүгдийг хослуулна уу. `;
-                } else {
-                    if (earned === totalPossible) {
-                        message = '🎉 Баяр хүргэе! Бүрэн зөв хариулсан байна.';
-                    } else {
-                        message = `📌 Таны дүн: ${earned}/${totalPossible}. Дахин оролдоод үзээрэй.`;
-                    }
-                }
-                messageBox.innerText = message || 'Тест дуусгахын тулд бүх үгийг хослуулна уу.';
-            }
-
-            // Тестийг эхнээс нь эхлүүлэх
-            function resetTest() {
-                userMatches = {};
-                selectedType = null;
-                selectedId = null;
-                // Монгол үгсийг дахин холих
-                mongolItems = PAIRS.map(p => p.mongol);
-                mongolItems = shuffleArray([...mongolItems]);
-                renderEnglish();
-                renderMongol();
-                updatePairsDisplay();
-                updateScore();
-                messageBox.innerText = '';
-            }
-
-            // Эхлүүлэх
-            function init() {
-                resetTest(); // эхний холилт
-                document.getElementById('submitBtn').addEventListener('click', submitTest);
-                document.getElementById('resetBtn').addEventListener('click', resetTest);
-            }
-
-            init();
-        })();
+        // Тоглоомыг эхлүүлэх
+        initGame();
     </script>
 </body>
 </html>
