@@ -1,8 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>English-Mongolian Drag & Drop Test</title>
+
 <style>
 body{font-family:Arial,sans-serif;max-width:1200px;margin:auto;padding:20px;background:#f0f4f8;}
 h2{text-align:center;color:#1e3c5c;}
@@ -10,7 +11,7 @@ h2{text-align:center;color:#1e3c5c;}
 .column{width:48%;float:left;margin:1%;}
 .english-item,.mongolian-item{padding:10px;margin:5px;border-radius:15px;min-height:50px;}
 .english-item{background:#e8f0fe;border:2px solid #4a90e2;position:relative;}
-.mongolian-item{background:#fff5e6;border:2px solid #e67e22;cursor:move;position:relative;}
+.mongolian-item{background:#fff5e6;border:2px solid #e67e22;cursor:move;}
 .english-item.correct{background:#d4edda;border-color:#28a745;}
 .english-item.wrong{background:#f8d7da;border-color:#dc3545;}
 .checkmark{position:absolute;top:5px;right:10px;font-size:18px;font-weight:bold;}
@@ -21,135 +22,266 @@ h2{text-align:center;color:#1e3c5c;}
 #timerBox{display:none;margin:10px 0;font-weight:bold;}
 </style>
 </head>
+
 <body>
+
 <h2>English 🇲🇳 Mongolian Drag & Drop Test</h2>
+
 <div class="container">
-<input type="file" id="csvFile" accept=".csv">
+
 <input type="number" id="timeInput" value="30" min="0"> мин
 <button onclick="startQuiz()">▶ Эхлэх</button>
 <button onclick="resetQuiz()">⟲ Шинэ эхлэх</button>
+
 <div id="timerBox">⏳ <span id="timer"></span></div>
 <div class="scoreboard" id="scoreboard">✅ 0/0 | ❌ 0</div>
 <div id="quiz" style="overflow:hidden;"></div>
+
 <div class="nav">
 <button onclick="prevPage()">◀ Өмнөх</button>
 <span id="pageInfo"></span>
 <button onclick="nextPage()">Дараах ▶</button>
 </div>
+
 <button onclick="checkAnswers()">✅ Шалгах</button>
 <button onclick="retryWrong()">🔄 Буруу дахин</button>
+
 <div id="result"></div>
+
 </div>
 
 <script>
-var words=[],originalWords=[],answers={},wrongList=[],timerInterval,totalSeconds,currentPage=0,PAGE_SIZE=5;
 
-function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+var words=[], originalWords=[], answers={}, wrongList=[];
+var timerInterval,totalSeconds,currentPage=0;
+var PAGE_SIZE=5;
+var draggedValue=null;
 
-// CSV унших
-document.getElementById('csvFile').addEventListener('change', function(e){
-  var file=e.target.files[0];
-  if(!file) return;
-  var reader=new FileReader();
-  reader.onload=function(ev){
-    var lines=ev.target.result.split(/\r?\n/);
-    originalWords=[];
+/* ---------------- CSV АВТОМАТААР УНШИХ ---------------- */
+
+window.onload=function(){
+  fetch("Word1.csv")
+  .then(res=>res.text())
+  .then(data=>{
+    var lines=data.split(/\r?\n/);
     for(var i=0;i<lines.length;i++){
-      var line=lines[i].trim(); if(!line) continue;
-      var parts=line.split(',');
-      if(parts.length>=2) originalWords.push([parts[0].trim(),parts[1].trim()]);
+      var line=lines[i].trim();
+      if(!line) continue;
+      var parts=line.split(",");
+      if(parts.length>=2){
+        originalWords.push([parts[0].trim(),parts[1].trim()]);
+      }
     }
-    alert('✅ '+originalWords.length+' үг ачааллаа');
-  };
-  reader.readAsText(file);
-});
+    alert("✅ "+originalWords.length+" үг Word1.csv-аас уншлаа");
+  })
+  .catch(()=>alert("❌ Word1.csv файл олдсонгүй"));
+};
 
-// Start quiz
-function startQuiz(){
-  if(originalWords.length===0){alert('⚠️ CSV файлыг сонгоно уу'); return;}
-  words=shuffle(originalWords); answers={}; wrongList=[]; currentPage=0;
-  startTimer(); renderPage();
+/* ---------------- SHUFFLE ---------------- */
+
+function shuffle(arr){
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var t=a[i]; a[i]=a[j]; a[j]=t;
+  }
+  return a;
 }
 
-// Render page
-function renderPage(){
-  var totalPages=Math.ceil(words.length/PAGE_SIZE);
-  var start=currentPage*PAGE_SIZE;
-  var end=start+PAGE_SIZE;
+/* ---------------- QUIZ START ---------------- */
 
-  if(currentPage===totalPages-1 && (words.length-start)<5){
-    start=Math.max(0, words.length-PAGE_SIZE-(words.length%PAGE_SIZE));
-    end=words.length;
+function startQuiz(){
+  if(originalWords.length===0){
+    alert("⚠️ CSV ачаалагдаагүй байна");
+    return;
   }
-  if(end>words.length) end=words.length;
+  words=shuffle(originalWords);
+  answers={};
+  wrongList=[];
+  currentPage=0;
+  startTimer();
+  renderPage();
+}
 
-  var html='';
-  html+='<div class="column"><h3>АНГЛИ ҮГС</h3>';
+/* ---------------- RENDER ---------------- */
+
+function renderPage(){
+  var start=currentPage*PAGE_SIZE;
+  var end=Math.min(start+PAGE_SIZE,words.length);
+
+  var html='<div class="column"><h3>АНГЛИ</h3>';
+
   for(var i=start;i<end;i++){
     html+='<div class="english-item" ondrop="drop(event)" ondragover="allowDrop(event)" id="word-'+i+'">'+words[i][0]+'</div>';
   }
-  html+='</div>';
 
-  html+='<div class="column"><h3>МОНГОЛ</h3>';
-  var meanings=[]; for(var i=start;i<end;i++) meanings.push(words[i][1]); meanings=shuffle(meanings);
+  html+='</div><div class="column"><h3>МОНГОЛ</h3>';
+
+  var meanings=[];
+  for(var i=start;i<end;i++) meanings.push(words[i][1]);
+  meanings=shuffle(meanings);
+
   for(var i=0;i<meanings.length;i++){
-    html+='<div class="mongolian-item" draggable="true" ondragstart="drag(event)" id="mong-'+i+'">'+meanings[i]+'</div>';
+    html+='<div class="mongolian-item" draggable="true" ondragstart="drag(event)">'+meanings[i]+'</div>';
   }
+
   html+='</div><div class="clear"></div>';
-  document.getElementById('quiz').innerHTML=html;
-  updatePageInfo(); updateScoreboard(); highlightAssigned();
+  document.getElementById("quiz").innerHTML=html;
+
+  updatePageInfo();
+  highlightAssigned();
 }
 
-// Drag & Drop
-var draggedValue=null;
-function drag(ev){draggedValue=ev.target.innerHTML;}
-function allowDrop(ev){ev.preventDefault();}
-function drop(ev){ev.preventDefault(); var t=ev.target; if(!t.classList.contains('english-item')) return; var idx=parseInt(t.id.split('-')[1],10); answers[idx]=draggedValue; highlightAssigned();}
+/* ---------------- DRAG DROP ---------------- */
 
-// Highlight
+function drag(ev){ draggedValue=ev.target.innerHTML; }
+function allowDrop(ev){ ev.preventDefault(); }
+
+function drop(ev){
+  ev.preventDefault();
+  var target=ev.target;
+  if(!target.classList.contains("english-item")) return;
+
+  var idx=parseInt(target.id.split("-")[1]);
+
+  for(var k in answers){
+    if(answers[k]===draggedValue) delete answers[k];
+  }
+
+  answers[idx]=draggedValue;
+  highlightAssigned();
+}
+
+/* ---------------- CHECK ---------------- */
+
 function highlightAssigned(){
-  var totalPages=Math.ceil(words.length/PAGE_SIZE);
-  var start=currentPage*PAGE_SIZE; var end=start+PAGE_SIZE;
-  if(currentPage===totalPages-1 && (words.length-start)<5){start=Math.max(0, words.length-PAGE_SIZE-(words.length%PAGE_SIZE)); end=words.length;}
-  if(end>words.length) end=words.length;
+  var start=currentPage*PAGE_SIZE;
+  var end=Math.min(start+PAGE_SIZE,words.length);
+
   for(var i=start;i<end;i++){
-    var div=document.getElementById('word-'+i); if(!div) continue;
-    div.classList.remove('correct','wrong');
-    if(answers[i]){ if(answers[i]===words[i][1]) div.classList.add('correct'); else div.classList.add('wrong'); addCheck(div,answers[i]===words[i][1]?'✅':'❌'); }
+    var div=document.getElementById("word-"+i);
+    if(!div) continue;
+
+    div.classList.remove("correct","wrong");
+
+    var old=div.querySelector(".checkmark");
+    if(old) old.remove();
+
+    if(answers[i]){
+      if(answers[i]===words[i][1]){
+        div.classList.add("correct");
+        addCheck(div,"✅");
+      } else {
+        div.classList.add("wrong");
+        addCheck(div,"❌");
+      }
+    }
   }
   updateScoreboard();
 }
 
-// Check answers
-function checkAnswers(){var correct=0; wrongList=[];
-  for(var i=0;i<words.length;i++){var val=answers[i]; if(val===words[i][1]) correct++; else if(val) wrongList.push(words[i]);}
-  document.getElementById('result').innerHTML='📊 ОНОО: '+correct+'/'+words.length; highlightAssigned();
+function addCheck(el,sym){
+  var sp=document.createElement("span");
+  sp.className="checkmark";
+  sp.innerHTML=sym;
+  el.appendChild(sp);
 }
 
-// Retry wrong
-function retryWrong(){if(wrongList.length===0){alert('❌ Буруу байхгүй'); return;} words=shuffle(wrongList); answers={}; wrongList=[]; currentPage=0; renderPage();}
+function checkAnswers(){
+  var correct=0;
+  wrongList=[];
 
-// Reset
-function resetQuiz(){words=shuffle(originalWords); answers={}; wrongList=[]; currentPage=0; renderPage();}
+  for(var i=0;i<words.length;i++){
+    if(answers[i]===words[i][1]) correct++;
+    else if(answers[i]) wrongList.push(words[i]);
+  }
 
-// Add checkmark
-function addCheck(el,sym){if(!el.querySelector('.checkmark')){var sp=document.createElement('span'); sp.className='checkmark'; sp.innerHTML=sym; el.appendChild(sp);}}
+  document.getElementById("result").innerHTML="📊 ОНОО: "+correct+"/"+words.length;
+  localStorage.setItem("lastScore",correct+"/"+words.length);
+  highlightAssigned();
+}
 
-// Timer
+function retryWrong(){
+  if(wrongList.length===0){
+    alert("❌ Буруу байхгүй");
+    return;
+  }
+  words=shuffle(wrongList);
+  answers={};
+  wrongList=[];
+  currentPage=0;
+  renderPage();
+}
+
+function resetQuiz(){
+  words=shuffle(originalWords);
+  answers={};
+  wrongList=[];
+  currentPage=0;
+  renderPage();
+}
+
+/* ---------------- TIMER ---------------- */
+
 function startTimer(){
-  var mins=parseInt(document.getElementById('timeInput').value,10);
-  if(isNaN(mins)||mins<=0){document.getElementById('timerBox').style.display='none'; return;}
-  totalSeconds=mins*60; document.getElementById('timerBox').style.display='inline-block'; updateTimer();
-  if(timerInterval) clearInterval(timerInterval);
-  timerInterval=setInterval(function(){totalSeconds--; if(totalSeconds<0){clearInterval(timerInterval); checkAnswers(); alert('⏰ Дууслаа');} else updateTimer();},1000);
-}
-function updateTimer(){var m=Math.floor(totalSeconds/60); var s=totalSeconds%60; if(s<10)s='0'+s; document.getElementById('timer').innerHTML=m+':'+s;}
+  var mins=parseInt(document.getElementById("timeInput").value);
+  if(isNaN(mins)||mins<=0){
+    document.getElementById("timerBox").style.display="none";
+    return;
+  }
+  totalSeconds=mins*60;
+  document.getElementById("timerBox").style.display="inline-block";
+  updateTimer();
 
-// Pagination
-function prevPage(){if(currentPage>0){currentPage--; renderPage();}}
-function nextPage(){if((currentPage+1)*PAGE_SIZE<words.length){currentPage++; renderPage();}}
-function updatePageInfo(){var totalPages=Math.ceil(words.length/PAGE_SIZE); document.getElementById('pageInfo').innerHTML='Хуудас '+(currentPage+1)+' / '+totalPages;}
-function updateScoreboard(){var c=0,w=0; for(var i=0;i<words.length;i++){if(answers[i]===words[i][1])c++; else if(answers[i]) w++;} document.getElementById('scoreboard').innerHTML='✅ '+c+'/'+words.length+' | ❌ '+w;}
+  if(timerInterval) clearInterval(timerInterval);
+
+  timerInterval=setInterval(function(){
+    totalSeconds--;
+    if(totalSeconds<0){
+      clearInterval(timerInterval);
+      checkAnswers();
+      alert("⏰ Дууслаа");
+    } else updateTimer();
+  },1000);
+}
+
+function updateTimer(){
+  var m=Math.floor(totalSeconds/60);
+  var s=totalSeconds%60;
+  if(s<10) s="0"+s;
+  document.getElementById("timer").innerHTML=m+":"+s;
+}
+
+/* ---------------- NAV ---------------- */
+
+function prevPage(){
+  if(currentPage>0){
+    currentPage--;
+    renderPage();
+  }
+}
+
+function nextPage(){
+  if((currentPage+1)*PAGE_SIZE<words.length){
+    currentPage++;
+    renderPage();
+  }
+}
+
+function updatePageInfo(){
+  var totalPages=Math.ceil(words.length/PAGE_SIZE);
+  document.getElementById("pageInfo").innerHTML="Хуудас "+(currentPage+1)+" / "+totalPages;
+}
+
+function updateScoreboard(){
+  var c=0,w=0;
+  for(var i=0;i<words.length;i++){
+    if(answers[i]===words[i][1]) c++;
+    else if(answers[i]) w++;
+  }
+  document.getElementById("scoreboard").innerHTML="✅ "+c+"/"+words.length+" | ❌ "+w;
+}
+
 </script>
 </body>
 </html>
