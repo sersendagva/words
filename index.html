@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>English-Mongolian Drag & Drop Test</title>
-
+<title>English-Mongolian Click-to-Match Test</title>
 <style>
 body{font-family:Arial,sans-serif;margin:0;padding:15px;background:#f0f4f8;}
 h2{text-align:center;color:#1e3c5c;}
@@ -15,7 +14,7 @@ h2{text-align:center;color:#1e3c5c;}
   padding:12px;margin:6px 0;border-radius:12px;min-height:50px;font-size:16px;
 }
 .english-item{background:#e8f0fe;border:2px solid #4a90e2;position:relative;}
-.mongolian-item{background:#fff5e6;border:2px solid #e67e22;cursor:grab;}
+.mongolian-item{background:#fff5e6;border:2px solid #e67e22;cursor:pointer;}
 .english-item.correct{background:#d4edda;border-color:#28a745;}
 .english-item.wrong{background:#f8d7da;border-color:#dc3545;}
 .checkmark{position:absolute;top:5px;right:10px;font-size:18px;font-weight:bold;}
@@ -30,12 +29,11 @@ button:active{transform:scale(0.95);}
   button{width:100%;margin:6px 0;}
 }
 </style>
-
-<script src="https://cdn.jsdelivr.net/npm/@interactjs/interactjs/dist/interact.min.js"></script>
 </head>
 <body>
 
-<h2>English 🇲🇳 Mongolian Drag & Drop Test</h2>
+<h2>English 🇲🇳 Mongolian Click-to-Match Test</h2>
+
 <div class="container">
 
 <input type="number" id="timeInput" value="30" min="0"> мин
@@ -44,6 +42,7 @@ button:active{transform:scale(0.95);}
 
 <div id="timerBox">⏳ <span id="timer"></span></div>
 <div class="scoreboard" id="scoreboard">✅ 0/0 | ❌ 0</div>
+
 <div id="quiz"></div>
 
 <div>
@@ -62,6 +61,7 @@ button:active{transform:scale(0.95);}
 var words=[], originalWords=[], answers={}, wrongList=[];
 var timerInterval,totalSeconds,currentPage=0;
 var PAGE_SIZE=5;
+var selectedIndex=null;
 
 /* CSV LOAD */
 window.onload=function(){
@@ -107,53 +107,32 @@ function renderPage(){
   var range=getRange(currentPage);
   var html='<div class="columns"><div class="column"><h3>АНГЛИ</h3>';
   for(var i=range.start;i<range.end;i++){
-    html+='<div class="english-item" id="word-'+i+'">'+words[i][0]+'</div>';
+    html+='<div class="english-item" onclick="selectTarget('+i+')" id="word-'+i+'">'+words[i][0]+'</div>';
   }
   html+='</div><div class="column"><h3>МОНГОЛ</h3>';
   var meanings=[]; for(var i=range.start;i<range.end;i++) meanings.push(words[i][1]);
   meanings=shuffle(meanings);
   for(var i=0;i<meanings.length;i++){
-    html+='<div class="mongolian-item">'+meanings[i]+'</div>';
+    html+='<div class="mongolian-item" onclick="selectMeaning(this)">'+meanings[i]+'</div>';
   }
   html+='</div></div>';
   document.getElementById("quiz").innerHTML=html;
-
-  enableDragDrop(); // bind interact.js
-  updatePageInfo(); highlightAssigned();
+  highlightAssigned();
+  updatePageInfo();
 }
 
-/* INTERACT.JS DRAG & DROP */
-function enableDragDrop(){
-  interact('.mongolian-item').draggable({
-    inertia:true,
-    modifiers:[interact.modifiers.restrictRect({restriction:'parent'})],
-    autoScroll:true,
-    listeners:{move: dragMoveListener}
-  });
-
-  interact('.english-item').dropzone({
-    accept: '.mongolian-item',
-    overlap:0.75,
-    ondrop: function(event){
-      var target=event.target;
-      var dragged=event.relatedTarget;
-      answers[parseInt(target.id.split('-')[1])]=dragged.innerText;
-      dragged.remove(); // remove dragged element
-      highlightAssigned();
-    }
-  });
+/* CLICK TO MATCH */
+function selectTarget(i){selectedIndex=i;}
+function selectMeaning(el){
+  if(selectedIndex===null) return;
+  // Remove previous selection of this value
+  for(var k in answers){ if(answers[k]===el.innerText) delete answers[k]; }
+  answers[selectedIndex]=el.innerText;
+  selectedIndex=null;
+  highlightAssigned();
 }
 
-function dragMoveListener(event){
-  var target=event.target;
-  var x=(parseFloat(target.getAttribute('data-x'))||0)+event.dx;
-  var y=(parseFloat(target.getAttribute('data-y'))||0)+event.dy;
-  target.style.transform='translate('+x+'px,'+y+'px)';
-  target.setAttribute('data-x',x);
-  target.setAttribute('data-y',y);
-}
-
-/* CHECK & HIGHLIGHT */
+/* HIGHLIGHT */
 function highlightAssigned(){
   for(var i=0;i<words.length;i++){
     var div=document.getElementById("word-"+i);
@@ -173,7 +152,15 @@ function retryWrong(){if(wrongList.length===0) return; words=shuffle(wrongList);
 function resetQuiz(){words=shuffle(originalWords); answers={}; wrongList=[]; currentPage=0; renderPage();}
 
 /* TIMER */
-function startTimer(){var mins=parseInt(document.getElementById("timeInput").value);if(isNaN(mins)||mins<=0){document.getElementById("timerBox").style.display='none';return;} totalSeconds=mins*60; document.getElementById("timerBox").style.display='block'; updateTimer(); if(timerInterval) clearInterval(timerInterval); timerInterval=setInterval(function(){totalSeconds--; if(totalSeconds<0){clearInterval(timerInterval);checkAnswers();alert("⏰ Дууслаа");}else updateTimer();},1000);}
+function startTimer(){
+  var mins=parseInt(document.getElementById("timeInput").value);
+  if(isNaN(mins)||mins<=0){document.getElementById("timerBox").style.display='none';return;}
+  totalSeconds=mins*60; document.getElementById("timerBox").style.display='block'; updateTimer();
+  if(timerInterval) clearInterval(timerInterval);
+  timerInterval=setInterval(function(){
+    totalSeconds--; if(totalSeconds<0){clearInterval(timerInterval);checkAnswers();alert("⏰ Дууслаа");}else updateTimer();
+  },1000);
+}
 function updateTimer(){var m=Math.floor(totalSeconds/60); var s=totalSeconds%60; if(s<10)s="0"+s; document.getElementById("timer").innerHTML=m+":"+s;}
 
 /* NAV */
