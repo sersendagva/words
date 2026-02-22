@@ -60,7 +60,7 @@ var draggedValue=null;
 /* ---------------- CSV АВТОМАТААР УНШИХ ---------------- */
 
 window.onload=function(){
-  fetch("Word1.csv")
+  fetch("word1.csv")
   .then(res=>res.text())
   .then(data=>{
     var lines=data.split(/\r?\n/);
@@ -72,9 +72,9 @@ window.onload=function(){
         originalWords.push([parts[0].trim(),parts[1].trim()]);
       }
     }
-    alert("✅ "+originalWords.length+" үг Word1.csv-аас уншлаа");
+    alert("✅ "+originalWords.length+" үг word1.csv-аас уншлаа");
   })
-  .catch(()=>alert("❌ Word1.csv файл олдсонгүй"));
+  .catch(()=>alert("❌ word1.csv файл олдсонгүй"));
 };
 
 /* ---------------- SHUFFLE ---------------- */
@@ -285,3 +285,4 @@ function updateScoreboard(){
 </script>
 </body>
 </html>
+
