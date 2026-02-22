@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>English-Mongolian Touch Match</title>
+<title>English-Mongolian Touch Match Test</title>
 <style>
 body{font-family:Arial,sans-serif;margin:0;padding:15px;background:#f0f4f8;}
 h2{text-align:center;color:#1e3c5c;}
@@ -63,27 +63,26 @@ let timerInterval,totalSeconds,currentPage=0;
 let PAGE_SIZE=5;
 let selectedIndex=null;
 
-/* CSV LOAD */
-window.onload=function(){
-  fetch("word1.csv")
-  .then(res=>res.text())
-  .then(data=>{
-    const lines=data.split(/\r?\n/);
-    for(let i=0;i<lines.length;i++){
-      const parts=lines[i].split(",");
-      if(parts.length>=2) originalWords.push([parts[0].trim(),parts[1].trim()]);
-    }
-  }).catch(()=>alert("word1.csv олдсонгүй"));
-};
-
 /* SHUFFLE */
 function shuffle(arr){let a=arr.slice();for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;}
 
 /* START */
 function startQuiz(){
-  if(originalWords.length===0){alert("CSV ачаалагдаагүй"); return;}
-  words=shuffle(originalWords); answers={}; wrongList=[]; currentPage=0;
-  startTimer(); renderPage();
+  // CSV-аас шууд ачааллах
+  fetch("word1.csv")
+  .then(res=>res.text())
+  .then(data=>{
+    const lines=data.split(/\r?\n/);
+    originalWords=[];
+    for(let i=0;i<lines.length;i++){
+      const parts=lines[i].split(",");
+      if(parts.length>=2) originalWords.push([parts[0].trim(),parts[1].trim()]);
+    }
+    if(originalWords.length===0){alert("CSV-д үг байхгүй!"); return;}
+    words=shuffle(originalWords); answers={}; wrongList=[]; currentPage=0;
+    startTimer(); renderPage();
+  })
+  .catch(()=>alert("word1.csv олдсонгүй"));
 }
 
 /* PAGE LOGIC */
@@ -115,12 +114,20 @@ function renderPage(){
   html+='</div></div>';
   document.getElementById("quiz").innerHTML=html;
 
-  // Touch-friendly events
+  // Touch friendly events
   document.querySelectorAll('.english-item').forEach((el,i)=>{
     el.addEventListener('touchstart',()=>{selectedIndex=i;});
+    el.addEventListener('click',()=>{selectedIndex=i;});
   });
   document.querySelectorAll('.mongolian-item').forEach((el)=>{
     el.addEventListener('touchstart',()=>{
+      if(selectedIndex===null) return;
+      for(let k in answers){if(answers[k]===el.innerText) delete answers[k];}
+      answers[selectedIndex]=el.innerText;
+      selectedIndex=null;
+      highlightAssigned();
+    });
+    el.addEventListener('click',()=>{
       if(selectedIndex===null) return;
       for(let k in answers){if(answers[k]===el.innerText) delete answers[k];}
       answers[selectedIndex]=el.innerText;
