@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>English-Mongolian Drag & Drop</title>
+<title>English-Mongolian Drag & Drop Test</title>
 
 <style>
-body{font-family:Arial;max-width:1200px;margin:auto;padding:20px;background:#f0f4f8;}
+body{font-family:Arial,sans-serif;max-width:1200px;margin:auto;padding:20px;background:#f0f4f8;}
 h2{text-align:center;color:#1e3c5c;}
 .container{background:#fff;padding:20px;border-radius:20px;}
 .column{width:48%;float:left;margin:1%;}
@@ -62,11 +62,12 @@ var draggedValue=null;
 window.onload=function(){
   fetch("word1.csv")
   .then(res=>{
-    if(!res.ok) throw new Error("CSV not found");
+    if(!res.ok) throw new Error("word1.csv олдсонгүй");
     return res.text();
   })
   .then(data=>{
     var lines=data.split(/\r?\n/);
+    originalWords=[];
     for(var i=0;i<lines.length;i++){
       var line=lines[i].trim();
       if(!line) continue;
@@ -77,7 +78,10 @@ window.onload=function(){
     }
     alert("✅ "+originalWords.length+" үг word1.csv-аас уншлаа");
   })
-  .catch(()=>alert("❌ word1.csv файл олдсонгүй"));
+  .catch(err=>{
+    alert("❌ word1.csv файл олдсонгүй");
+    console.error(err);
+  });
 };
 
 /* ---------------- SHUFFLE ---------------- */
@@ -91,11 +95,11 @@ function shuffle(arr){
   return a;
 }
 
-/* ---------------- QUIZ START ---------------- */
+/* ---------------- START ---------------- */
 
 function startQuiz(){
   if(originalWords.length===0){
-    alert("⚠️ CSV ачаалагдаагүй");
+    alert("⚠️ CSV ачаалагдаагүй байна");
     return;
   }
   words=shuffle(originalWords);
@@ -106,24 +110,32 @@ function startQuiz(){
   renderPage();
 }
 
-/* ---------------- PAGE LOGIC (СҮҮЛЧИЙН ХУУДАС НЭГТГЭХ) ---------------- */
+/* ---------------- PAGE LOGIC ---------------- */
+
+function getTotalPages(){
+  var fullPages=Math.floor(words.length/PAGE_SIZE);
+  var remainder=words.length%PAGE_SIZE;
+
+  if(remainder>0 && remainder<5 && fullPages>0){
+    return fullPages; 
+  }
+  return Math.ceil(words.length/PAGE_SIZE);
+}
 
 function getPageRange(page){
-  var total=words.length;
-  var totalPages=Math.ceil(total/PAGE_SIZE);
+  var totalPages=getTotalPages();
 
-  var start=page*PAGE_SIZE;
-  var end=start+PAGE_SIZE;
-
-  // Хэрэв сүүлийн хуудас 5-аас бага бол өмнөхтэй нэгтгэнэ
-  if(page===totalPages-1 && (total-start)<PAGE_SIZE){
-      start=Math.max(0,total-PAGE_SIZE*2);
-      end=total;
+  if(page===totalPages-1){
+    return {
+      start:(totalPages-1)*PAGE_SIZE,
+      end:words.length
+    };
   }
 
-  if(end>total) end=total;
-
-  return {start:start,end:end};
+  return {
+    start:page*PAGE_SIZE,
+    end:page*PAGE_SIZE+PAGE_SIZE
+  };
 }
 
 /* ---------------- RENDER ---------------- */
@@ -151,13 +163,14 @@ function renderPage(){
   }
 
   html+='</div><div class="clear"></div>';
+
   document.getElementById("quiz").innerHTML=html;
 
   updatePageInfo();
   highlightAssigned();
 }
 
-/* ---------------- DRAG ---------------- */
+/* ---------------- DRAG DROP ---------------- */
 
 function drag(ev){ draggedValue=ev.target.innerHTML; }
 function allowDrop(ev){ ev.preventDefault(); }
@@ -204,7 +217,6 @@ function highlightAssigned(){
       }
     }
   }
-
   updateScoreboard();
 }
 
@@ -225,39 +237,27 @@ function checkAnswers(){
   }
 
   document.getElementById("result").innerHTML="📊 ОНОО: "+correct+"/"+words.length;
+  highlightAssigned();
 }
 
-/* ---------------- NAV ---------------- */
-
-function prevPage(){
-  if(currentPage>0){
-    currentPage--;
-    renderPage();
+function retryWrong(){
+  if(wrongList.length===0){
+    alert("❌ Буруу байхгүй");
+    return;
   }
+  words=shuffle(wrongList);
+  answers={};
+  wrongList=[];
+  currentPage=0;
+  renderPage();
 }
 
-function nextPage(){
-  var totalPages=Math.ceil(words.length/PAGE_SIZE);
-  if(currentPage<totalPages-1){
-    currentPage++;
-    renderPage();
-  }
-}
-
-function updatePageInfo(){
-  var totalPages=Math.ceil(words.length/PAGE_SIZE);
-  document.getElementById("pageInfo").innerHTML="Хуудас "+(currentPage+1)+" / "+totalPages;
-}
-
-/* ---------------- SCORE ---------------- */
-
-function updateScoreboard(){
-  var c=0,w=0;
-  for(var i=0;i<words.length;i++){
-    if(answers[i]===words[i][1]) c++;
-    else if(answers[i]) w++;
-  }
-  document.getElementById("scoreboard").innerHTML="✅ "+c+"/"+words.length+" | ❌ "+w;
+function resetQuiz(){
+  words=shuffle(originalWords);
+  answers={};
+  wrongList=[];
+  currentPage=0;
+  renderPage();
 }
 
 /* ---------------- TIMER ---------------- */
@@ -290,6 +290,36 @@ function updateTimer(){
   var s=totalSeconds%60;
   if(s<10) s="0"+s;
   document.getElementById("timer").innerHTML=m+":"+s;
+}
+
+/* ---------------- NAV ---------------- */
+
+function prevPage(){
+  if(currentPage>0){
+    currentPage--;
+    renderPage();
+  }
+}
+
+function nextPage(){
+  if(currentPage+1<getTotalPages()){
+    currentPage++;
+    renderPage();
+  }
+}
+
+function updatePageInfo(){
+  document.getElementById("pageInfo").innerHTML=
+  "Хуудас "+(currentPage+1)+" / "+getTotalPages();
+}
+
+function updateScoreboard(){
+  var c=0,w=0;
+  for(var i=0;i<words.length;i++){
+    if(answers[i]===words[i][1]) c++;
+    else if(answers[i]) w++;
+  }
+  document.getElementById("scoreboard").innerHTML="✅ "+c+"/"+words.length+" | ❌ "+w;
 }
 
 </script>
