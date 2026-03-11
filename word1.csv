@@ -1,101 +1,101 @@
-﻿Replace,"орлуулах, солих"
-Explain,тайлбарлах
-Hide,нуух
-Sour,исгэлэн
-Break,эвдэх
-Different,ялгаа
-Reveal,илчлэх
-Produce,үйлдвэрлэх
-Defect,"алдаа, доголдол"
-Choose,сонгох
-Choice,сонголт
-Mirror,тусган харуулах/Толь
-Bitter,гашуун
-Rancid,муудсан амт үнэр
-Distinct,"тод, тодорхой"
-Carry,тээвэрлэх
-Transport,тээвэрлэх
-Last,"үргэлжлэх, сүүлийн"
-Childhood,хүүхэд нас
-Prepare,бэлдэх
-Dew,шүүдэр
-Basic,"жижиг, суурь"
-Structure,бүтэц
-Greasy,тос ихтэй
-Gape,ангайх
-Individual,хувь хүн
-Peer,үе тэнгийнхэн
-Endorse,"дэмжих, гэрээлэх"
-Shift,өөрчлөлт
-Suffer,өвдөх зовох
-Appear,ил гарч ирэх
-Solve,"шийдэх, шийдвэрлэх"
-Sufficient,"хангалттай, хүрэлцээтэй"
-Obvious,тодорхой
-Remote,холын зай
-Role,үүрэг
-Gain,олж авах
-Handle,зохицуулах
-Harmful,аюултай
-Refuse,татгалзах
-Include,"багтаах, агуулах"
-Influence,нөлөөлөх
-Peep/peek,нууцаар харах
-Disturb,саад болох
-Method,"арга зам, арга техник"
-Narrow,нарийн
-Innovate,шинийг санаачлах
-Glance,гүйлгэн харах
-Protect,хамгаалах
-Habit,зуршил
-Require,шаардах
-Poll,санал асуулга
-Survey,судалгаа
-Regard,хүндэтгэх
-Gaze,гайхан ширтэх
-Similar,төстэй
-In brief,товчхондоо
-Pollute,бохирдуулах
-Establish,үсгэн байгуулах
-Launch,эхлүүлэх
-Chop,хэрчих
-Wonder,гайхах
-Heal,эмчлэх
-Weak,сул дорой
-Pick up,"түүж авах, утсаа авах"
-Tight-knit,ойр дотно
-Attempt,оролдлого
-Funeral,булш бунхан
-Supervise,зөвлөх
-Pipe,"гаанс, гуурс"
-Beverage,уух юм
-Curiosity,сониуч зан
-Persistent,цөхрөлтгүй шаргуу
-Vulnerable,эмзэг
-Jaws,эрүү шүд
-Tenant,түрээслэгч
-Significant,чухал
-Mistake,алдаа
-Trap,урхи
-Ignore,үл тоох
-Relinquish,бууж өгөх
-Separate,"салгах, тусгаарлах"
-Clever,ухаалаг
-Severe,хүнд хэцүү
-Engage,"холбогдох, сүй тавих"
-Consider,авч хэлэлцэх
-Appointment,томилолт
-Cotton,хөвөн даавуу
-Beg,гуйх
-Idol,шүтээн
-Extremely,маш их
-Frog/Toads,мэлхий
-Shed,"урсгах, гуужуулах"
-Even,бүр
-Apex,оргил
-Prove,батлах
-Develop,"хөгжих, хөгжүүлэх, өсөх"
-Pay,төлбөр төлөх
-Register,"бүртгэх, бүртгүүлэх"
-Novel,"боть, роман"
-Bizarre,"хачин, этгээд"
+1,Petrol,бензин
+2,Fake,хуурмаг
+3,Call-off,үйл ажиллагаа цуцлах
+4,Hideous,муухай аймшигтай
+5,Above,дээр дээгүүр
+6,Absolute,яг тодорхой
+7,Access,нэвтрэх
+8,Accommodation,хүмүүс амьдардаг орон байр
+9,Accurate,нарийн тодорхой үнэн зөв
+10,Acid,хүчил
+11,Acquire,эзэмших олж авах
+12,Moisturizer,чийгшүүлэгч
+13,Spotless,өөгүй
+14,Filthy,бохир
+15,Decorate,чимэглэх
+16,Decoration,чимэглэл
+17,Wrinkle,үрчлээ зураас
+18,Miserable,гунигтай өрөвдөлтэй
+19,Adopt,үрчилж авах
+20,Crown,хаан ширээ титэм
+21,Advertise,зар сурталчилгаа
+22,Desert,цөл
+23,Aggressive,ууртай догшин
+24,Direction,зүг чиг
+25,Gear,хэрэглэл тоноглол
+26,Botany,ургамал судлал
+27,Disgusting,жигшмээр муухай
+28,Aircraft,нисдэг тээврийн хэрэгсэл
+29,Air force,агаарын хүчин
+30,Airport,онгоцны буудал
+31,Pore,арьсны нүх
+32,Alliance,холбоотон
+33,Mummify,занданшуулах
+34,Fabulous,маш сайхан үлгэр жишээ
+35,All right,ойлгомжтой
+36,Adorable,маш үзэсгэлэнтэй
+37,Aim/Ambition,зорилго хүсэл
+38,Optimistic,өөдрөг үзэл
+39,Pessimistic,гутранги
+40,Press,дарах
+41,Crumble,үйрүүлэх
+42,Crumple,үрчийлгэх
+43,Announce,мэдэгдэх
+44,Rapid,маш хурдан
+45,Layer,үе давхарга
+46,Cognitive,сэтгэхүйн
+47,Lecture,лекц
+48,Wave,долгион
+49,Curly,буржгар
+50,Straight,шулуун
+51,Plus,нэмэх
+52,Out of date,хоцрогдсон
+53,Up to date,хамгийн сүүлийн үеийн
+54,Happen/Occur,тохиолдох
+55,Rational,оновчтой
+56,Flawless,төгс
+57,Appreciate,үнэлэх ойлгох
+58,Series,цуврал
+59,Corner stone,тулгын чулуу
+60,Evolve,хувьсах
+61,Peak,оргил
+62,Hallmark,шинж тэмдэг
+63,Ingenious/Gifted,авьяастай
+64,Pour,цутгах
+65,Arrive,ирэх
+66,Row,эгнээ
+67,Coin,зоос
+68,Ambassador,элчин сайд
+69,Poverty,ядуурал
+70,Cure,эмчилгээ
+71,Care,санаа тавих
+72,Lie,худал хэлэх
+73,Liar,худалч
+74,Perplexed,эргэлзсэн
+75,Back,нуруу
+76,Distill,нэрэх
+77,Complete,бүрэн
+78,Rage,уур хилэн
+79,Thing,зүйл
+80,Hole,нүх
+81,Reserve,хадгалах урьдчилан захиалах
+82,Wound,гэмтэл
+83,Rite,зан үйл
+84,Neck,хүзүү
+85,Statue/Monument,хөшөө
+86,Saga,үлгэр домог
+87,Scissors,хайч
+88,Contest,тэмцээн
+89,Sibling,эгч дүүс
+90,Peeler,ногоо арилгагч
+91,Spatula,хусуур
+92,Grater,үрэгч
+93,Frying pan,хайруулын таваг
+94,Sink,угаалтуур
+95,Witness,гэрч
+96,Taste,амт амтлах
+97,Oven,шарах шүүгээ
+98,Stove,зуух плитка
+99,Kettle,ус буцалгагч
+100,Freezer,хөлдөөгч
+101,Fridge,хөргөгч
