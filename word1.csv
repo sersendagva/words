@@ -1,101 +1,102 @@
-1,Petrol,бензин
-2,Fake,хуурмаг
-3,Call-off,үйл ажиллагаа цуцлах
-4,Hideous,муухай аймшигтай
-5,Above,дээр дээгүүр
-6,Absolute,яг тодорхой
-7,Access,нэвтрэх
-8,Accommodation,хүмүүс амьдардаг орон байр
-9,Accurate,нарийн тодорхой үнэн зөв
-10,Acid,хүчил
-11,Acquire,эзэмших олж авах
-12,Moisturizer,чийгшүүлэгч
-13,Spotless,өөгүй
-14,Filthy,бохир
-15,Decorate,чимэглэх
-16,Decoration,чимэглэл
-17,Wrinkle,үрчлээ зураас
-18,Miserable,гунигтай өрөвдөлтэй
-19,Adopt,үрчилж авах
-20,Crown,хаан ширээ титэм
-21,Advertise,зар сурталчилгаа
-22,Desert,цөл
-23,Aggressive,ууртай догшин
-24,Direction,зүг чиг
-25,Gear,хэрэглэл тоноглол
-26,Botany,ургамал судлал
-27,Disgusting,жигшмээр муухай
-28,Aircraft,нисдэг тээврийн хэрэгсэл
-29,Air force,агаарын хүчин
-30,Airport,онгоцны буудал
-31,Pore,арьсны нүх
-32,Alliance,холбоотон
-33,Mummify,занданшуулах
-34,Fabulous,маш сайхан үлгэр жишээ
-35,All right,ойлгомжтой
-36,Adorable,маш үзэсгэлэнтэй
-37,Aim/Ambition,зорилго хүсэл
-38,Optimistic,өөдрөг үзэл
-39,Pessimistic,гутранги
-40,Press,дарах
-41,Crumble,үйрүүлэх
-42,Crumple,үрчийлгэх
-43,Announce,мэдэгдэх
-44,Rapid,маш хурдан
-45,Layer,үе давхарга
-46,Cognitive,сэтгэхүйн
-47,Lecture,лекц
-48,Wave,долгион
-49,Curly,буржгар
-50,Straight,шулуун
-51,Plus,нэмэх
-52,Out of date,хоцрогдсон
-53,Up to date,хамгийн сүүлийн үеийн
-54,Happen/Occur,тохиолдох
-55,Rational,оновчтой
-56,Flawless,төгс
-57,Appreciate,үнэлэх ойлгох
-58,Series,цуврал
-59,Corner stone,тулгын чулуу
-60,Evolve,хувьсах
-61,Peak,оргил
-62,Hallmark,шинж тэмдэг
-63,Ingenious/Gifted,авьяастай
-64,Pour,цутгах
-65,Arrive,ирэх
-66,Row,эгнээ
-67,Coin,зоос
-68,Ambassador,элчин сайд
-69,Poverty,ядуурал
-70,Cure,эмчилгээ
-71,Care,санаа тавих
-72,Lie,худал хэлэх
-73,Liar,худалч
-74,Perplexed,эргэлзсэн
-75,Back,нуруу
-76,Distill,нэрэх
-77,Complete,бүрэн
-78,Rage,уур хилэн
-79,Thing,зүйл
-80,Hole,нүх
-81,Reserve,хадгалах урьдчилан захиалах
-82,Wound,гэмтэл
-83,Rite,зан үйл
-84,Neck,хүзүү
-85,Statue/Monument,хөшөө
-86,Saga,үлгэр домог
-87,Scissors,хайч
-88,Contest,тэмцээн
-89,Sibling,эгч дүүс
-90,Peeler,ногоо арилгагч
-91,Spatula,хусуур
-92,Grater,үрэгч
-93,Frying pan,хайруулын таваг
-94,Sink,угаалтуур
-95,Witness,гэрч
-96,Taste,амт амтлах
-97,Oven,шарах шүүгээ
-98,Stove,зуух плитка
-99,Kettle,ус буцалгагч
-100,Freezer,хөлдөөгч
-101,Fridge,хөргөгч
+Petrol,бензин
+Fake,хуурмаг
+Call-off,үйл ажиллагаа цуцлах
+Hideous,муухай аймшигтай
+Above,дээр дээгүүр
+Absolute,яг тодорхой
+Access,нэвтрэх
+Accommodation,хүмүүс амьдардаг орон байр
+Accurate,нарийн тодорхой үнэн зөв
+Acid,хүчил
+Acquire,эзэмших олж авах
+Moisturizer,чийгшүүлэгч
+Spotless,өөгүй
+Filthy,бохир
+Decorate,чимэглэх
+Decoration,чимэглэл
+Wrinkle,үрчлээ зураас
+Miserable,гунигтай өрөвдөлтэй
+Adopt,үрчилж авах
+Crown,хаан ширээ титэм
+Advertise,зар сурталчилгаа
+Desert,цөл
+Aggressive,ууртай догшин
+Direction,зүг чиг
+Gear,хэрэглэл тоноглол
+Botany,ургамал судлал
+Disgusting,жигшмээр муухай
+Aircraft,нисдэг тээврийн хэрэгсэл
+Air force,агаарын хүчин
+Airport,онгоцны буудал
+Pore,арьсны нүх
+Alliance,холбоотон
+Mummify,занданшуулах
+Fabulous,маш сайхан үлгэр жишээ
+All right,ойлгомжтой
+Adorable,маш үзэсгэлэнтэй
+Aim/Ambition,зорилго хүсэл
+Optimistic,өөдрөг үзэл
+Pessimistic,гутранги
+Press,дарах
+Crumble,үйрүүлэх
+Crumple,үрчийлгэх
+Announce,мэдэгдэх
+Rapid,маш хурдан
+Layer,үе давхарга
+Cognitive,сэтгэхүйн
+Lecture,лекц
+Wave,долгион
+Curly,буржгар
+Straight,шулуун
+Plus,нэмэх
+Out of date,хоцрогдсон
+Up to date,хамгийн сүүлийн үеийн
+Happen/Occur,тохиолдох
+Rational,оновчтой
+Flawless,төгс
+Appreciate,үнэлэх ойлгох
+Series,цуврал
+Corner stone,тулгын чулуу
+Evolve,хувьсах
+Peak,оргил
+Hallmark,шинж тэмдэг
+Ingenious/Gifted,авьяастай
+Pour,цутгах
+Arrive,ирэх
+Row,эгнээ
+Coin,зоос
+Ambassador,элчин сайд
+Poverty,ядуурал
+Cure,эмчилгээ
+Care,санаа тавих
+Lie,худал хэлэх
+Liar,худалч
+Perplexed,эргэлзсэн
+Back,нуруу
+Distill,нэрэх
+Complete,бүрэн
+Rage,уур хилэн
+Thing,зүйл
+Hole,нүх
+Reserve,хадгалах урьдчилан захиалах
+Wound,гэмтэл
+Rite,зан үйл
+Neck,хүзүү
+Statue/Monument,хөшөө
+Saga,үлгэр домог
+Scissors,хайч
+Contest,тэмцээн
+Sibling,эгч дүүс
+Peeler,ногоо арилгагч
+Spatula,хусуур
+Grater,үрэгч
+Frying pan,хайруулын таваг
+Sink,угаалтуур
+Witness,гэрч
+Taste,амт амтлах
+Oven,шарах шүүгээ
+Stove,зуух плитка
+Kettle,ус буцалгагч
+Freezer,хөлдөөгч
+Fridge,хөргөгч
+
