@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Үг бичих тест</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#1e293b;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+background:#0f172a;
+padding:40px;
+border-radius:20px;
+width:600px;
+text-align:center;
+}
+
+.word{
+font-size:40px;
+margin:30px;
+color:#fbbf24;
+}
+
+input{
+font-size:24px;
+padding:10px;
+width:80%;
+border-radius:10px;
+border:none;
+text-align:center;
+}
+
+button{
+margin-top:20px;
+padding:10px 25px;
+font-size:18px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
+
+.correct{
+color:#22c55e;
+font-size:20px;
+}
+
+.wrong{
+color:#ef4444;
+font-size:20px;
+}
+
+.stats{
+margin-top:20px;
+font-size:18px;
+}
+
+.progress{
+height:20px;
+background:#334155;
+border-radius:10px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.bar{
+height:100%;
+background:#fbbf24;
+width:0%;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🇬🇧 → 🇲🇳 Үг бичих тест</h1>
+
+<div class="word" id="englishWord">...</div>
+
+<input id="answerInput" placeholder="Монгол орчуулга бичнэ">
+
+<br>
+
+<button onclick="checkAnswer()">Шалгах</button>
+
+<div id="result"></div>
+
+<div class="stats">
+
+Зөв: <span id="correct">0</span> |
+Буруу: <span id="wrong">0</span> |
+Нийт: <span id="total">0</span>
+
+<div class="progress">
+<div class="bar" id="bar"></div>
+</div>
+
+</div>
+
+<button onclick="retryWrong()">❌ Алдсан үгс давтах</button>
+
+</div>
+
+<script>
+
+let pairs=[]
+let current=0
+
+let correct=0
+let wrong=0
+
+let wrongPairs=[]
+
+const wordEl=document.getElementById("englishWord")
+const input=document.getElementById("answerInput")
+const result=document.getElementById("result")
+
+function parseCSV(text){
+
+const lines=text.split("\n")
+
+const arr=[]
+
+for(let line of lines){
+
+const p=line.split(",")
+
+if(p.length>=2){
+
+arr.push({
+english:p[0].trim(),
+mongol:p[1].trim()
+})
+
+}
+
+}
+
+return arr
+
+}
+
+async function loadCSV(){
+
+try{
+
+const r=await fetch("word1.csv")
+
+const text=await r.text()
+
+pairs=parseCSV(text)
+
+shuffle()
+
+showWord()
+
+document.getElementById("total").innerText=pairs.length
+
+}catch(e){
+
+wordEl.innerText="word1.csv олдсонгүй"
+
+}
+
+}
+
+function shuffle(){
+
+for(let i=pairs.length-1;i>0;i--){
+
+const j=Math.floor(Math.random()*(i+1))
+
+[pairs[i],pairs[j]]=[pairs[j],pairs[i]]
+
+}
+
+}
+
+function showWord(){
+
+if(current>=pairs.length){
+
+wordEl.innerText="Дууслаа"
+
+return
+
+}
+
+wordEl.innerText=pairs[current].english
+
+input.value=""
+
+input.focus()
+
+}
+
+function checkAnswer(){
+
+const answer=input.value.trim()
+
+const correctWord=pairs[current].mongol
+
+if(answer===correctWord){
+
+correct++
+
+result.innerHTML="<div class='correct'>✔ Зөв</div>"
+
+}else{
+
+wrong++
+
+wrongPairs.push(pairs[current])
+
+result.innerHTML="<div class='wrong'>❌ Буруу → "+correctWord+"</div>"
+
+}
+
+current++
+
+updateStats()
+
+showWord()
+
+}
+
+function updateStats(){
+
+document.getElementById("correct").innerText=correct
+
+document.getElementById("wrong").innerText=wrong
+
+const total=correct+wrong
+
+const percent=Math.round((correct/total)*100)||0
+
+document.getElementById("bar").style.width=percent+"%"
+
+}
+
+function retryWrong(){
+
+if(wrongPairs.length==0)return
+
+pairs=[...wrongPairs]
+
+wrongPairs=[]
+
+current=0
+correct=0
+wrong=0
+
+shuffle()
+
+showWord()
+
+updateStats()
+
+}
+
+input.addEventListener("keypress",function(e){
+
+if(e.key==="Enter")checkAnswer()
+
+})
+
+loadCSV()
+
+</script>
+
+</body>
+</html>
